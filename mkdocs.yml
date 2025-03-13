@@ -1,0 +1,93 @@
+site_name: LLM Fine-Tuning Course
+site_description: 'LLM Fine-Tuning 기법을 배우는 워크샵'
+site_author: 'Jong Hyun Park'
+docs_dir: docs/
+nav:
+  - 홈: index.md
+  - 기본 개념:
+    - LLM Background 지식: concepts/llm_background.md
+    - Fine-Tuning 기본: concepts/fine_tuning_basics.md
+    - 모델 유형 및 특징: concepts/model_types.md
+    - LLM 패러다임: concepts/llm_paradigm.md
+  - 데이터 준비:
+    - 데이터셋 준비: data_preparation/dataset_creation.md
+    - 템플릿과 포맷: data_preparation/templates_formats.md
+  - 튜닝 기법:
+    - CPT (Continued Pre-Training): tuning_techniques/continual_pretraining.md
+    - SFT (Supervised Fine-Tuning): tuning_techniques/supervised_finetuning.md
+    - DPO (Direct Preference Optimization): tuning_techniques/preference_optimization.md
+    - PEFT 방법론: tuning_techniques/peft_methods.md
+    - 양자화 기법: tuning_techniques/quantization.md
+    - 한국어 확장 튜닝: tuning_techniques/korean_tuning.md
+  - 모델 평가:
+    - 벤치마크 및 평가: evaluation/benchmarks.md
+    - LLM as Judge: evaluation/llm_as_judge.md
+    - 서빙 및 최적화: evaluation/serving_optimization.md
+  - 활용 사례:
+    - Alpaca: case_studies/alpaca.md
+    - DeepSeek: case_studies/deepseek.md
+    - Zephyr: case_studies/zephyr.md
+  - 실습 가이드:
+    - GPT 파인튜닝: practice_guides/gpt_finetuning.md
+    - 오픈 웨이트 파인튜닝: practice_guides/open_weight_finetuning.md
+    - DPO 튜닝: practice_guides/dpo_tutorial.md
+    - 추론 모델 개발: practice_guides/reasoning_model.md
+  - 연구 동향 및 프로젝트:
+    - 최신 연구 동향: trends_projects/latest_research.md
+    - 데이터 및 라이선스: trends_projects/license_data_issues.md
+    - 경쟁 모델 개발: trends_projects/competition_guide.md
+    - 도메인 특화 모델: trends_projects/domain_specific.md
+  - About:
+    - Other Courses: https://github.com/jonhpark7966/courses_archive
+    - Author: https://sudormrf.run/jong-hyun-park/
+
+
+theme:
+  name: material
+  features:
+    - navigation.expand
+    - navigation.path
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+  language: ko
+  palette:
+    - scheme: slate
+      primary: amber 
+      accent: amber
+      toggle:
+        icon: material/brightness-4
+        name: 라이트 모드로 전환
+    - scheme: default
+      primary: amber 
+      accent: amber 
+      toggle:
+        icon: material/brightness-7
+        name: 다크 모드로 전환
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+  - pymdownx.tabbed
+  - pymdownx.critic
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - admonition
+  - footnotes
+  - toc:
+      permalink: true
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+
+plugins:
+  - search

@@ -1,0 +1,42 @@
+.md-nav__item .md-nav__link--active {
+    font-weight: bold;
+}
+
+.md-nav__title {
+    color: var(--md-default-fg-color--light);
+}
+
+/* 하위 디렉토리 섹션의 위에 여백 추가 */
+.md-nav__item--nested {
+    margin-top: 1.5rem;
+}
+
+/* 첫 번째 하위 디렉토리 섹션은 여백 제거 (필요한 경우) */
+.md-nav__list > .md-nav__item--nested:first-child {
+    margin-top: 0;
+} 
+
+/* H1 헤더 스타일 */
+.md-typeset h1 {
+    color: #e67700 !important;  /* 더 어두운 Amber 색상으로 변경 */
+    font-size: 2.2em !important;  /* 글자 크기 조정 */
+    font-weight: bold !important;  /* 굵기 조정 */
+}
+
+/* H2 헤더 스타일 */
+.md-typeset h2 {
+    color: #f57c00 !important;  /* 어두운 Amber 계열 색상 */
+    font-size: 1.8em !important;
+    border-bottom: 2px solid #f57c00 !important;  /* 밑줄 색상도 맞춤 */
+    padding-bottom: 5px;
+    font-weight: bold !important;  /* 굵기 조정 */
+}
+
+/* H3 헤더 스타일 */
+.md-typeset h3 {
+    color: #ff8f00 !important;  /* 약간 어두운 Amber 색상 */
+    font-size: 1.5em !important;
+    font-style: italic;
+}
+
+/* H4~H6도 비슷하게 조정 가능 */

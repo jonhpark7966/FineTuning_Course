@@ -1,0 +1,2205 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LLM Fine-Tuning 기법을 배우는 워크샵">
+      
+      
+        <meta name="author" content="Jong Hyun Park">
+      
+      
+      
+        <link rel="prev" href="../continual_pretraining/">
+      
+      
+        <link rel="next" href="../preference_optimization/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>SFT (Supervised Fine-Tuning) - LLM Fine-Tuning Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#supervised-fine-tuning-sft" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-header__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLM Fine-Tuning Course
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SFT (Supervised Fine-Tuning)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-nav__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLM Fine-Tuning Course
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    홈
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    기본 개념
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            기본 개념
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_background/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM Background 지식
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fine_tuning_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-Tuning 기본
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/model_types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    모델 유형 및 특징
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_paradigm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    데이터 준비
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            데이터 준비
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/dataset_creation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터셋 준비
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/templates_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    템플릿과 포맷
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    튜닝 기법
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            튜닝 기법
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../continual_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPT (Continued Pre-Training)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sft" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 개요
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT의 중요성
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT의 중요성">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      사전학습 모델의 한계 극복
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      실용성 확대
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alignment
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 데이터 준비
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT 데이터 준비">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      지시-응답 쌍 구성
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      데이터 다양성 확보
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      품질 중심 데이터 큐레이션
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 최적화 전략
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT 최적화 전략">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      하이퍼파라미터 설정
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      과적합 방지 기법
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      효율적 미세조정 기법
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      평가 및 모니터링
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 구현 예제
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT와 다른 학습 방법 비교
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT와 다른 학습 방법 비교">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-pre-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 사전학습(Pre-training)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-cpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 연속 사전학습(CPT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 강화학습(RL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT의 한계와 고려사항
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT의 한계와 고려사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      데이터 의존성
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      과적합 위험
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      지식 망각
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      평가의 어려움
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preference_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO (Direct Preference Optimization)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peft_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEFT 방법론
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    양자화 기법
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../korean_tuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 확장 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    모델 평가
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            모델 평가
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/llm_as_judge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/serving_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    서빙 및 최적화
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    활용 사례
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            활용 사례
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/alpaca/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpaca
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/deepseek/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/zephyr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Zephyr
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    실습 가이드
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            실습 가이드
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/gpt_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAI GPT 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_ipynb/1_openai_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT (Chat Model) 파인튜닝 하기!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/open_weight_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    오픈 웨이트 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/dpo_tutorial/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/reasoning_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    추론 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    연구 동향 및 프로젝트
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            연구 동향 및 프로젝트
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/latest_research/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    최신 연구 동향
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/license_data_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터 및 라이선스
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/competition_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    경쟁 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/domain_specific/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    도메인 특화 모델
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/jonhpark7966/courses_archive" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Other Courses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sudormrf.run/jong-hyun-park/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Author
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sft" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 개요
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT의 중요성
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT의 중요성">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      사전학습 모델의 한계 극복
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      실용성 확대
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alignment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alignment
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 데이터 준비
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT 데이터 준비">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#-" class="md-nav__link">
+    <span class="md-ellipsis">
+      지시-응답 쌍 구성
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      데이터 다양성 확보
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      품질 중심 데이터 큐레이션
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 최적화 전략
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT 최적화 전략">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      하이퍼파라미터 설정
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      과적합 방지 기법
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      효율적 미세조정 기법
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      평가 및 모니터링
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 구현 예제
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT와 다른 학습 방법 비교
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT와 다른 학습 방법 비교">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-pre-training" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 사전학습(Pre-training)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-cpt" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 연속 사전학습(CPT)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sft-vs-rl" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT vs 강화학습(RL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT의 한계와 고려사항
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SFT의 한계와 고려사항">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      데이터 의존성
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      과적합 위험
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      지식 망각
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      평가의 어려움
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="supervised-fine-tuning-sft">Supervised Fine-Tuning (SFT)<a class="headerlink" href="#supervised-fine-tuning-sft" title="Permanent link">&para;</a></h1>
+<h2 id="sft">SFT 개요<a class="headerlink" href="#sft" title="Permanent link">&para;</a></h2>
+<ul>
+<li>SFT(Supervised Fine-Tuning)는 사전학습된 언어 모델을 특정 작업이나 사용자 지시에 맞게 조정하는 기법입니다.</li>
+<li>PreTrained Base 모델이 가진 단순한 "Next Token Prediction" 능력을 넘어, 사용자 질문에 유용하게 답변하는 능력 (Instruction Following) 을 부여합니다.</li>
+<li>지시-응답 쌍으로 구성된 데이터셋을 사용해 모델이 사람의 의도에 맞는 출력을 생성하도록 훈련합니다.</li>
+<li>이 외에도 knowledge distillation 이나 style tuning, 최근에는 Reasoning 능력을 향상시키는 등 다양하게 활용됩니다. </li>
+</ul>
+<hr />
+<p>혹시라도 SFT 에 대해서 익숙하지 않으시다면 아래 글을 보고 오시는 것을 추천드립니다. </p>
+<table>
+<thead>
+<tr>
+<th>💡 추천 자료</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://sudormrf.run/2025/02/27/supervised-fine-tuning/">Supervised Fine-Tuning 이해하기</a> - 제가 작성했던 SFT의 기본 개념과 예시를 설명한 글입니다.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="sft_1">SFT의 중요성<a class="headerlink" href="#sft_1" title="Permanent link">&para;</a></h2>
+<h3 id="_1">사전학습 모델의 한계 극복<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>사전학습된 베이스 모델은 텍스트 생성 능력은 있지만, 사용자 의도를 정확히 파악하거나 지시를 따르는 능력이 부족합니다.</li>
+<li>SFT는 모델이 사용자 지시를 이해하고 유용한 응답을 생성하도록 행동을 교정합니다.</li>
+<li>대부분의 사용자 분들이 익숙한 ChatGPT 는 당연히 이미 SFT 된 (그리고 더 많은 개선이 된) 모델을 기반으로 합니다.  </li>
+</ul>
+<h3 id="_2">실용성 확대<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SFT를 통해 모델은 질문 응답, 요약, 코드 생성 등 다양한 작업을 수행할 수 있게 됩니다.</li>
+<li>특정 도메인(의료, 법률, 금융 등)에 특화된 응답을 생성하도록 조정할 수 있습니다.</li>
+</ul>
+<h3 id="alignment">Alignment<a class="headerlink" href="#alignment" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SFT는 모델이 인간의 가치와 의도에 맞게 행동하도록 Align하는 첫 단계입니다.</li>
+<li>유해하거나 부적절한 응답을 줄이고, 도움이 되는 정보를 제공하도록 훈련합니다.</li>
+</ul>
+<h2 id="sft_2">SFT 데이터 준비<a class="headerlink" href="#sft_2" title="Permanent link">&para;</a></h2>
+<h3 id="-">지시-응답 쌍 구성<a class="headerlink" href="#-" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SFT 데이터는 기본적으로 (지시/질문, 기대 응답) 쌍으로 구성됩니다. Instruction 모댈에게 튜닝을 시키기 떄문이죠.  </li>
+<li>데이터 수집 방법:<ul>
+<li><strong>인간 작성 데이터</strong>: 전문가나 평가자가 직접 작성한 고품질 응답<ul>
+<li>ex. OpenAI InstructGPT의 13K 데이터셋, <a href="https://arxiv.org/pdf/2203.02155">InstructGPT</a> 페이퍼에 어떻게 실제로 사람들을 고용해서 데이터를 작성했는지 잘 나와있습니다.</li>
+</ul>
+</li>
+<li><strong>합성 데이터</strong>: 기존 강력한 LLM을 활용해 생성한 지시-응답 쌍 (예: Self-Instruct, Alpaca 데이터셋, UltraChat 등등.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="_3">데이터 다양성 확보<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>다양한 유형의 지시를 포함해야 모델의 일반화 능력이 향상됩니다:</li>
+<li>질문-답변, 분류, 요약, 번역, 창의적 글쓰기 등 다양한 작업</li>
+<li>간단한 질문부터 복잡한 추론이 필요한 질문까지 난이도 변화</li>
+<li>여러 주제와 도메인을 포괄하는 질문들</li>
+</ul>
+<h3 id="_4">품질 중심 데이터 큐레이션<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<ul>
+<li>데이터 품질이 SFT 성공의 핵심 요소입니다.</li>
+<li><a href="https://arxiv.org/pdf/2305.11206">Meta의 LIMA 연구</a> 에 따르면, 1,000개의 고품질 예제만으로도 우수한 성능을 달성할 수 있습니다.</li>
+<li>Alpaca 도 52,000 개로 좋은 효과를 보여줬고, 최근 S1 의 경우도 1,000개의 데이터셋으로 reasoning 모델을 만들었다고 합니다.  </li>
+<li>품질 기준:<ul>
+<li>정확성: 사실에 기반한 정보 제공</li>
+<li>유용성: 질문에 직접적으로 관련된 도움이 되는 응답</li>
+<li>명확성: 이해하기 쉽고 논리적인 구조</li>
+<li>안전성: 유해하거나 편향된 내용 배제</li>
+</ul>
+</li>
+</ul>
+<h2 id="sft_3">SFT 최적화 전략<a class="headerlink" href="#sft_3" title="Permanent link">&para;</a></h2>
+<h3 id="_5">하이퍼파라미터 설정<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>학습률(Learning Rate)</strong>: 일반적으로 1e-5 ~ 5e-5 범위의 낮은 값 사용</li>
+<li><strong>배치 크기(Batch Size)</strong>: 메모리 한계 내에서 가능한 크게 설정 (8-32)</li>
+<li><strong>에포크(Epoch)</strong>: 데이터 양에 따라 조절 (대량 데이터: 1-2 에포크, 소량 데이터: 3-5 에포크)</li>
+<li><strong>학습 스케줄러</strong>: 선형 또는 코사인 감쇄와 초기 워밍업(3-5%) 적용</li>
+</ul>
+<h3 id="_6">과적합 방지 기법<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>조기 종료(Early Stopping)</strong>: 검증 손실이 더 이상 개선되지 않을 때 학습 중단</li>
+<li><strong>가중치 감쇄(Weight Decay)</strong>: 일반적으로 0.01 내외로 설정</li>
+<li><strong>데이터 증강</strong>: 기존 데이터의 변형을 통해 다양성 확보</li>
+<li><strong>계층 동결(Layer Freezing)</strong>: 하위 계층은 고정하고 상위 계층만 미세조정</li>
+</ul>
+<h3 id="_7">효율적 미세조정 기법<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>LoRA(Low-Rank Adaptation)</strong>: 원본 가중치는 고정하고 저랭크 행렬만 학습하여 메모리 효율성 증가</li>
+<li><strong>QLoRA</strong>: 양자화된 모델에 LoRA 적용하여 더 큰 모델도 적은 메모리로 미세조정 가능</li>
+<li><strong>Prefix/Prompt Tuning</strong>: 모델 파라미터 대신 입력에 학습 가능한 토큰 추가</li>
+</ul>
+<h3 id="_8">평가 및 모니터링<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h3>
+<ul>
+<li>검증 세트에서 정기적으로 성능 측정 (손실, 정확도, 생성 품질 등)</li>
+<li>인간 평가를 통한 출력 품질 검증 (유용성, 정확성, 안전성 등)</li>
+<li>다양한 프롬프트에 대한 일반화 능력 확인</li>
+</ul>
+<h2 id="sft_4">SFT 구현 예제<a class="headerlink" href="#sft_4" title="Permanent link">&para;</a></h2>
+<p>아래는 Hugging Face Transformers를 사용한 간단한 SFT 구현 예시입니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">TrainingArguments</span><span class="p">,</span> <span class="n">Trainer</span>
+<span class="c1"># 1. 프리트레인 된 GPT-2 모델과 토크나이저 불러오기</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s2">&quot;gpt2&quot;</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+<span class="c1"># 2. 예시용 지도 학습 데이터 정의 (Q&amp;A 형태)</span>
+<span class="n">train_pairs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Q: What is the capital of France?</span><span class="se">\n</span><span class="s2">A:&quot;</span><span class="p">,</span> <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="s2">&quot; Paris.&quot;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s2">&quot;prompt&quot;</span><span class="p">:</span> <span class="s2">&quot;Q: Explain the theory of relativity in simple terms.</span><span class="se">\n</span><span class="s2">A:&quot;</span><span class="p">,</span>
+     <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="s2">&quot; It is a physics theory by Einstein that says space and time are linked together...&quot;</span><span class="p">},</span>
+    <span class="c1"># ... (추가 데이터)</span>
+<span class="p">]</span>
+
+<span class="c1"># 3. 데이터셋 전처리: 프롬프트와 답변을 이어붙여 토큰화하고 레이블 생성</span>
+<span class="n">train_encodings</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;input_ids&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;attention_mask&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="k">for</span> <span class="n">pair</span> <span class="ow">in</span> <span class="n">train_pairs</span><span class="p">:</span>
+    <span class="c1"># 프롬프트 + 응답을 하나의 시퀀스로 만들고 토큰화</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">pair</span><span class="p">[</span><span class="s2">&quot;response&quot;</span><span class="p">]</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
+    <span class="n">input_ids</span> <span class="o">=</span> <span class="n">enc</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span>
+    <span class="n">attn_mask</span> <span class="o">=</span> <span class="n">enc</span><span class="p">[</span><span class="s2">&quot;attention_mask&quot;</span><span class="p">]</span>
+    <span class="c1"># 레이블 생성: 프롬프트 부분은 -100으로 마스킹하고, 답변 부분만 학습 대상으로 설정</span>
+    <span class="c1"># (GPT-2는 causal LM이므로, 프롬프트까지 모두 입력으로 받고 답변 부분만 손실 계산)</span>
+    <span class="n">prompt_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">pair</span><span class="p">[</span><span class="s2">&quot;prompt&quot;</span><span class="p">])[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">])</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">100</span><span class="p">]</span><span class="o">*</span><span class="n">prompt_len</span> <span class="o">+</span> <span class="n">input_ids</span><span class="p">[</span><span class="n">prompt_len</span><span class="p">:]</span>  <span class="c1"># 프롬프트 토큰에 대응되는 부분 -100</span>
+    <span class="c1"># 인코딩 결과 저장</span>
+    <span class="n">train_encodings</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+    <span class="n">train_encodings</span><span class="p">[</span><span class="s2">&quot;attention_mask&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attn_mask</span><span class="p">)</span>
+    <span class="n">train_encodings</span><span class="p">[</span><span class="s2">&quot;labels&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># 4. Trainer를 활용한 모델 미세조정 설정</span>
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./sft-model&quot;</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">learning_rate</span><span class="o">=</span><span class="mf">2e-5</span><span class="p">,</span>
+    <span class="n">warmup_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+    <span class="n">weight_decay</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">logging_dir</span><span class="o">=</span><span class="s2">&quot;./logs&quot;</span><span class="p">,</span>
+    <span class="n">evaluation_strategy</span><span class="o">=</span><span class="s2">&quot;no&quot;</span><span class="p">,</span>   <span class="c1"># (예시에서는 검증 생략)</span>
+    <span class="n">save_strategy</span><span class="o">=</span><span class="s2">&quot;epoch&quot;</span>
+<span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+                  <span class="n">train_dataset</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_encodings</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">]))),</span>  <span class="c1"># dummy indices</span>
+                  <span class="c1"># Trainer를 쓰려면 Dataset 형식 필요. 여기서는 개념 설명을 위해 생략</span>
+                  <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">data_collator</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">)</span>
+<span class="c1"># 실제로는 train_encodings를 HuggingFace Dataset으로 변환하여 trainer.train() 호출</span>
+</code></pre></div>
+<h2 id="sft_5">SFT와 다른 학습 방법 비교<a class="headerlink" href="#sft_5" title="Permanent link">&para;</a></h2>
+<h3 id="sft-vs-pre-training">SFT vs 사전학습(Pre-training)<a class="headerlink" href="#sft-vs-pre-training" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>사전학습</strong>: 대규모 텍스트 코퍼스에서 다음 토큰 예측을 통해 언어 이해 능력 습득</li>
+<li><strong>SFT</strong>: 지시-응답 쌍을 통해 특정 작업 수행 및 사용자 의도 이해 능력 향상</li>
+<li><strong>차이점</strong>: 사전학습은 일반적 언어 능력 개발, SFT는 특정 작업 및 형식에 맞는 응답 생성에 초점</li>
+</ul>
+<h3 id="sft-vs-cpt">SFT vs 연속 사전학습(CPT)<a class="headerlink" href="#sft-vs-cpt" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>연속 사전학습</strong>: 추가 코퍼스로 기존 사전학습을 계속하여 지식 확장/업데이트</li>
+<li><strong>SFT</strong>: 지도 학습을 통해 모델 행동 교정 및 특정 작업 수행 능력 향상</li>
+<li><strong>차이점</strong>: CPT는 지식 확장에 중점, SFT는 행동 조정에 중점</li>
+</ul>
+<h3 id="sft-vs-rl">SFT vs 강화학습(RL)<a class="headerlink" href="#sft-vs-rl" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>SFT</strong>: 직접적인 지도 학습으로 정답 예시를 모방하도록 훈련</li>
+<li><strong>RL</strong>: 보상 함수를 통해 모델이 더 나은 응답을 생성하도록 간접적으로 유도</li>
+<li><strong>관계</strong>: SFT는 종종 RL의 초기 정책 모델로 사용됨 (예: RLHF에서 SFT 모델이 기반)</li>
+<li><strong>효과</strong>: 최근 연구에 따르면 고품질 SFT만으로도 RL 수준의 성능을 달성할 수 있음</li>
+</ul>
+<h2 id="sft_6">SFT의 한계와 고려사항<a class="headerlink" href="#sft_6" title="Permanent link">&para;</a></h2>
+<h3 id="_9">데이터 의존성<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SFT 성능은 훈련 데이터의 품질과 다양성에 크게 의존합니다.</li>
+<li>편향되거나 부정확한 데이터는 모델의 출력에도 반영됩니다.</li>
+</ul>
+<h3 id="_10">과적합 위험<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<ul>
+<li>특히 소량의 데이터로 학습할 때 과적합이 발생할 수 있습니다.</li>
+<li>모델이 훈련 데이터의 패턴만 암기하고 새로운 입력에 일반화하지 못할 수 있습니다.</li>
+</ul>
+<h3 id="_11">지식 망각<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<ul>
+<li>SFT 과정에서 모델이 사전학습 단계에서 습득한 일부 지식을 잊을 수 있습니다.</li>
+<li>특히 공격적인 학습률이나 긴 학습 기간은 이 문제를 악화시킬 수 있습니다.</li>
+</ul>
+<h3 id="_12">평가의 어려움<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<ul>
+<li>생성 모델의 출력 품질을 자동으로 평가하기 어렵습니다.</li>
+<li>인간 평가는 비용이 많이 들고 주관적일 수 있습니다.</li>
+</ul>
+<h1 id="sft_7">SFT 성공 사례<a class="headerlink" href="#sft_7" title="Permanent link">&para;</a></h1>
+<h2 id="stanford-alpaca-gpt-35">Stanford Alpaca: 저비용으로 GPT-3.5 수준 달성<a class="headerlink" href="#stanford-alpaca-gpt-35" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>모델 기반</strong>: Meta의 LLaMA 7B</li>
+<li><strong>데이터</strong>: GPT-3.5(text-davinci-003)로 생성한 52,000개의 지시-응답 쌍</li>
+<li><strong>비용</strong>: 약 $500 (OpenAI API 사용)</li>
+<li><strong>성과</strong>: 블라인드 평가에서 GPT-3.5와 유사한 성능 달성 (90:89로 근소하게 앞섬)</li>
+<li><strong>의의</strong>: 소규모 공개 모델도 적절한 SFT로 상용 AI 수준에 근접할 수 있음을 증명</li>
+</ul>
+<h2 id="vicuna">Vicuna: 실제 사용자 대화로 학습한 오픈소스 챗봇<a class="headerlink" href="#vicuna" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>모델 기반</strong>: LLaMA 13B</li>
+<li><strong>데이터</strong>: ShareGPT에서 수집한 70,000건의 사용자-ChatGPT 대화</li>
+<li><strong>비용</strong>: 약 $300</li>
+<li><strong>성과</strong>: GPT-4 평가에서 ChatGPT 품질의 90% 이상 달성</li>
+<li><strong>의의</strong>: 실제 사용자 대화 데이터로 SFT하여 다중 턴 대화에 강한 오픈소스 챗봇 개발</li>
+</ul>
+<h2 id="microsoft-orca-gpt-4">Microsoft Orca: GPT-4 추론 과정 모방<a class="headerlink" href="#microsoft-orca-gpt-4" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>모델 기반</strong>: 13B 규모 모델</li>
+<li><strong>데이터</strong>: GPT-4가 생성한 단계별 설명(trace)과 사고 과정</li>
+<li><strong>성과</strong>:</li>
+<li>동일 크기 모델(Vicuna-13B) 대비 복잡한 추론 벤치마크에서 2배 이상 성능 향상</li>
+<li>Big-Bench Hard(BBH)에서 ChatGPT와 거의 대등한 성능</li>
+<li>AGIEval 벤치마크에서 시스템 프롬프트 최적화된 ChatGPT에 근접</li>
+<li><strong>의의</strong>: 대형 모델의 사고 과정을 모방 학습하는 방식이 작은 모델의 추론 능력 향상에 효과적임을 입증</li>
+</ul>
+<h2 id="deepseek-r1">DeepSeek R1 지식 증류: 초거대 모델의 추론 능력 전수<a class="headerlink" href="#deepseek-r1" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>접근법</strong>: 초거대 언어모델(DeepSeek R1)을 교사로 활용한 지식 증류</li>
+<li><strong>특징</strong>: 복잡한 문제에 대한 단계별 추론 과정(Chain-of-Thought)을 포함한 합성 데이터 생성</li>
+<li><strong>성과</strong>:</li>
+<li>LLaMA 기반 8B 모델 실험에서 최종 답만 학습 시 29%, 인간 전문가 풀이과정 학습 시 68%, DeepSeek R1 풀이과정 학습 시 87%의 정확도 달성</li>
+<li>인간 전문가가 작성한 해설보다 DeepSeek R1이 생성한 해설 데이터가 더 효과적</li>
+<li><strong>의의</strong>: 대형 모델의 지식을 작은 모델에 효과적으로 이전하는 새로운 SFT 방향 제시</li>
+</ul>
+<h2 id="sft_8">도메인 특화 SFT 성공 사례<a class="headerlink" href="#sft_8" title="Permanent link">&para;</a></h2>
+<h3 id="wizardcoder">WizardCoder: 코드 생성 특화 모델<a class="headerlink" href="#wizardcoder" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>모델 기반</strong>: 다양한 크기의 코드 언어 모델(15B, 34B 등)</li>
+<li><strong>데이터</strong>: 고품질 문제-해결 예시를 증강(Evol-Instruct)한 데이터</li>
+<li><strong>성과</strong>:</li>
+<li>WizardCoder-15B: HumanEval 벤치마크에서 57.3% 정답률(pass@1)</li>
+<li>WizardCoder-34B: 73% 이상의 정답률로 GPT-4(2023년 3월 버전) 성능 초과</li>
+<li>WizardCoder-33B v1.1: 79.9% 정답률로 ChatGPT-3.5(72.6%) 능가</li>
+<li><strong>의의</strong>: 제한된 파라미터로도 최적의 데이터와 기법을 적용하면 상용 AI 수준의 코딩 성능 달성 가능</li>
+</ul>
+<h3 id="wizardmath">WizardMath: 수학 문제 해결 특화 모델<a class="headerlink" href="#wizardmath" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>모델 기반</strong>: Meta의 LLaMA-2 모델들</li>
+<li><strong>데이터</strong>: 고난도 수학 문제를 단계별로 풀이하는 데이터</li>
+<li><strong>기법</strong>: 강화 학습(RL)을 병합한 독자 기법(RLEIF)</li>
+<li><strong>성과</strong>:</li>
+<li>WizardMath-13B: MATH 벤치마크에서 LLaMA2-70B보다 9.2%p 높은 점수</li>
+<li>WizardMath-70B: ChatGPT-3.5, Claude Instant 등을 뛰어넘는 수학 성능</li>
+<li>WizardMath-7B: 같은 7B급에서 독보적인 수학 실력(GSM8K 83.2% 등)</li>
+<li><strong>의의</strong>: 수학적 사고 과정을 집중적으로 훈련시키는 SFT가 모델의 문제 해결 능력을 크게 향상시킬 수 있음을 증명</li>
+</ul>
+<h2 id="_13">참고문헌<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p>Stanford Alpaca: <a href="https://crfm.stanford.edu/2023/03/13/alpaca.html">"Alpaca: A Strong, Replicable Instruction-Following Model"</a>, Stanford CRFM, 2023.</p>
+</li>
+<li>
+<p>Vicuna: <a href="https://lmsys.org/blog/2023-03-30-vicuna/">"Vicuna: An Open-Source Chatbot Impressing GPT-4 with 90% ChatGPT Quality"</a>, LMSYS Org, 2023.</p>
+</li>
+<li>
+<p>Microsoft Orca: <a href="https://www.microsoft.com/en-us/research/publication/orca-progressive-learning-from-complex-explanation-traces-of-gpt-4/">"Orca: Progressive Learning from Complex Explanation Traces of GPT-4"</a>, Microsoft Research, 2023.</p>
+</li>
+<li>
+<p>QLoRA &amp; Guanaco: <a href="https://arxiv.org/abs/2305.14314">"QLoRA: Efficient Finetuning of Quantized LLMs"</a>, Dettmers et al., 2023.</p>
+</li>
+<li>
+<p>DeepSeek R1: "Incentivizing Reasoning Capability in LLMs via Reinforcement Learning", DeepSeek AI, 2024.</p>
+</li>
+<li>
+<p>DeepSeek R1 Distillation: <a href="https://fireworks.ai/blog/deepseek-r1-distillation-reasoning">"Distillation with Reasoning: Can DeepSeek R1 Teach Better Than Humans?"</a>, Fireworks AI, 2024.</p>
+</li>
+<li>
+<p>WizardCoder: <a href="https://github.com/nlpxucan/WizardLM">"WizardCoder: Empowering Code Large Language Models with Evol-Instruct"</a>, Xu et al., 2023.</p>
+</li>
+<li>
+<p>WizardMath: <a href="https://openreview.net/forum?id=mMPMHWOdOy">"WizardMath: Empowering Mathematical Reasoning for Large Language Models via Reinforced Evol-Instruct"</a>, Luo et al., 2023.</p>
+</li>
+<li>
+<p><a href="https://nebius.com/blog/posts/fine-tuning/supervised-fine-tuning">"What is supervised fine-tuning in LLMs? Unveiling the process"</a>, Nebius, 2023.</p>
+</li>
+<li>
+<p><a href="https://aws.amazon.com/blogs/machine-learning/llm-continuous-self-instruct-fine-tuning-framework-powered-by-a-compound-ai-system-on-amazon-sagemaker/">"LLM continuous self-instruct fine-tuning framework powered by a compound AI system on Amazon SageMaker"</a>, AWS Machine Learning Blog, 2023.</p>
+</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../continual_pretraining/" class="md-footer__link md-footer__link--prev" aria-label="이전: CPT (Continued Pre-Training)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                CPT (Continued Pre-Training)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../preference_optimization/" class="md-footer__link md-footer__link--next" aria-label="다음: DPO (Direct Preference Optimization)">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                DPO (Direct Preference Optimization)
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

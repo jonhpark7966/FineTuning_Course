@@ -1,0 +1,1687 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LLM Fine-Tuning 기법을 배우는 워크샵">
+      
+      
+        <meta name="author" content="Jong Hyun Park">
+      
+      
+      
+        <link rel="prev" href="../model_types/">
+      
+      
+        <link rel="next" href="../../data_preparation/dataset_creation/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>LLM 패러다임 - LLM Fine-Tuning Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#llm" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-header__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLM Fine-Tuning Course
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              LLM 패러다임
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-nav__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLM Fine-Tuning Course
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    홈
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    기본 개념
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            기본 개념
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm_background/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM Background 지식
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../fine_tuning_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-Tuning 기본
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model_types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    모델 유형 및 특징
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scaling-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      스케일링 법칙 (Scaling Law)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="스케일링 법칙 (Scaling Law)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      스케일링 법칙의 의미와 중요성
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train-time-vs-test-time-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Train-Time vs. Test-Time Scaling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Train-Time vs. Test-Time Scaling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-time-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      추론 단계 스케일링 (Test-Time Scaling)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incentivization-and-reward-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      인센티브 설계 (Incentivization and Reward Design)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="인센티브 설계 (Incentivization and Reward Design)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-based-incentive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule-based Incentive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinforcement-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reinforcement Learning (강화 학습)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    데이터 준비
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            데이터 준비
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/dataset_creation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터셋 준비
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/templates_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    템플릿과 포맷
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    튜닝 기법
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            튜닝 기법
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/continual_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPT (Continued Pre-Training)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/supervised_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/preference_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO (Direct Preference Optimization)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/peft_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEFT 방법론
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    양자화 기법
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/korean_tuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 확장 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    모델 평가
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            모델 평가
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/llm_as_judge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/serving_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    서빙 및 최적화
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    활용 사례
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            활용 사례
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/alpaca/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpaca
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/deepseek/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/zephyr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Zephyr
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    실습 가이드
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            실습 가이드
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/gpt_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAI GPT 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_ipynb/1_openai_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT (Chat Model) 파인튜닝 하기!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/open_weight_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    오픈 웨이트 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/dpo_tutorial/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/reasoning_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    추론 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    연구 동향 및 프로젝트
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            연구 동향 및 프로젝트
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/latest_research/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    최신 연구 동향
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/license_data_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터 및 라이선스
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/competition_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    경쟁 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/domain_specific/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    도메인 특화 모델
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/jonhpark7966/courses_archive" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Other Courses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sudormrf.run/jong-hyun-park/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Author
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#scaling-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      스케일링 법칙 (Scaling Law)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="스케일링 법칙 (Scaling Law)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      스케일링 법칙의 의미와 중요성
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#train-time-vs-test-time-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      Train-Time vs. Test-Time Scaling
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Train-Time vs. Test-Time Scaling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-time-scaling" class="md-nav__link">
+    <span class="md-ellipsis">
+      추론 단계 스케일링 (Test-Time Scaling)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#incentivization-and-reward-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      인센티브 설계 (Incentivization and Reward Design)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="인센티브 설계 (Incentivization and Reward Design)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-based-incentive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule-based Incentive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reinforcement-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Reinforcement Learning (강화 학습)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="llm">LLM 패러다임<a class="headerlink" href="#llm" title="Permanent link">&para;</a></h1>
+<h2 id="scaling-law">스케일링 법칙 (Scaling Law)<a class="headerlink" href="#scaling-law" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>💡 필자의 의견</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine Learning 시대부터 Deep Learning, LLM, 최근의 Reasoning 모델까지 모든 흐름을 하나로 관통하는 키워드를 뽑으라면 저는 단연코 "Scaling Law" 를 뽑겠습니다.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_1">스케일링 법칙의 의미와 중요성<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>모델 사이즈, 데이터 양, 컴퓨팅 자원을 확장함에 따라 모델 성능이 체계적으로 향상되는 경험적 법칙입니다.</li>
+<li>LLM 의 성능 (여기서는 test loss) 은 사이즈를 키우면 좋아진다는 경향을 실험적으로 발견한 페이퍼입니다. </li>
+<li>2020년대에 들어 LLM과 데이터 규모를 모두 키우는 연구 방향이 지속되었는데요, 이 방향을 급격하게 가속화하는 계기가 Scaling Law 였다고 생각합니다.</li>
+<li>참조 (꼭 보시는 것을 추천드립니다!) : <a href="https://arxiv.org/pdf/2001.08361">Scaling Laws for Neural Language Models</a></li>
+</ul>
+<div style="text-align: center;">
+  <img src="../../rscs/scalinglaw.png" alt="Scaling Law Graph">
+</div>
+
+<p>하나의 그래프로 요약한 내용입니다. 각 요소들에 대해 독립적으로 얼마나 성능 개선을 일으키는지 실험들이 다 있으니 자세한 내용은 참조 페이퍼를 보세요.  </p>
+<ul>
+<li><strong>모델 크기</strong>, <strong>데이터 양</strong>, <strong>컴퓨팅 자원</strong> 이 3가지를 늘리면 성능이 좋아진다! 간단합니다. </li>
+<li>컴퓨팅 자원이 시간이 지날수록 저렴해지니, 스케일링은 지속적으로 진행되고 있습니다.</li>
+<li>데이터가 고갈나는 것이 최근의 고민 거리 입니다. </li>
+</ul>
+<h2 id="train-time-vs-test-time-scaling">Train-Time vs. Test-Time Scaling<a class="headerlink" href="#train-time-vs-test-time-scaling" title="Permanent link">&para;</a></h2>
+<p>앞서 설명한 내용은 Train-Time Scaling 입니다, 학습 시간을 늘린 것이죠. 최근에는 다른 방향으로 스케일링이 나오고 있습니다. 
+스타트를 끊은 모델은 OpenAI o1 이고, 최근에는 DeepSeek R1, QwQ, Sonnet Thinking, Gemini Thinking 등 쏟아져 나오고 있죠.  </p>
+<p>참조 - <a href="https://openai.com/index/learning-to-reason-with-llms/">Learning to Reason with LLMs</a></p>
+<div style="text-align: center;">
+  <img src="../../rscs/learningtoreason.png" alt="Learning to Reason with LLMs">
+</div>
+
+<h3 id="test-time-scaling">추론 단계 스케일링 (Test-Time Scaling)<a class="headerlink" href="#test-time-scaling" title="Permanent link">&para;</a></h3>
+<p>Test-Time = Inference-Time = 추론 시간 입니다.
+모델이 토큰을 내뱉는 연산 시간 (=연산량) 을 늘리는 것 입니다.<br />
+기존에는 학습 시간을 늘렸다면, 이제는 일하는 시간을 늘립니다.<br />
+사람도 마찬가지에요, 공부를 오래해도 똑똑해지지만, 시험 시간이 넉넉하면 시험점수가 올라가죠.</p>
+<ul>
+<li>
+<p><strong>Chain-of-Thought</strong></p>
+<ul>
+<li>이런 방법론은 Prompting 으로 구현하고 있었습니다.  </li>
+<li>단순 대답이 아니라 풀이를 쓰면서 대답하도록 유도하면 똑똑해 집니다.  </li>
+</ul>
+</li>
+<li>
+<p><strong>Reasoning Models</strong></p>
+<ul>
+<li>최근의 reasoning 모델들은 CoT 프롬프팅이 없이도, 오래 생각하면서 답변하는 모델들 입니다. </li>
+<li>참조 페이퍼인 Learning to Reason 에 따르면, OpenAI o1은 강화학습을 통해 reasoning 모델을 만들었다고 합니다, 자세한 방법은 비공개고요. </li>
+<li>복잡한 사고를 요하는 문제들, 수학이나 코딩과 같은 문제들에 대해서 비약적인 성능향상을 보여줍니다.  </li>
+</ul>
+</li>
+<li>
+<p><strong>Workflow</strong> 또는 <strong>Agent</strong> 는?</p>
+<ul>
+<li>그렇다면, Self Correction이나 Multi Agent 간의 대화들을 통해 LLM 들을 다양하게 활용해서 방법론들도 Test-Time Scaling 을 할 수 있지 않을까요?</li>
+<li>LLM 자체의 test-time scaling 은 아니지만, 시스템 관점에서 보면 test-time scaling 이라고 해도 (조금 억지 보태면) 말이 되긴 합니다. 보통 이것을 test-time scaling 이라고 부르지는 않습니다. </li>
+</ul>
+</li>
+</ul>
+<h2 id="incentivization-and-reward-design">인센티브 설계 (Incentivization and Reward Design)<a class="headerlink" href="#incentivization-and-reward-design" title="Permanent link">&para;</a></h2>
+<p>OpenAI o1은 어떻게 만들었을까요? 이 힌트는 DeepSeek 가 R1을 만들고 그 방법을 상세히 공개하면서 찾을 수 있습니다.  </p>
+<h3 id="rule-based-incentive">Rule-based Incentive<a class="headerlink" href="#rule-based-incentive" title="Permanent link">&para;</a></h3>
+<p>쉽게 요약하면, 모델에게 자유도를 주고 수학 문제를 풀립니다. 풀이 방법은 알아서 찾으라 하고 수학 문제의 답변을 맞추는 것을 보상으로 줍니다.<br />
+Supervised Fine Tuning 처럼 풀이 방법을 가이드 하지 않죠. 
+"그랬더니 알아서 길게 풀이를 쓰며 학습을 하더라" 라는 것이 주요한 골자입니다.  </p>
+<p>이 내용은 DeepSeek의 성공사례 탐구 파트에서 더 자세히 보겠습니다. </p>
+<h3 id="reinforcement-learning">Reinforcement Learning (강화 학습)<a class="headerlink" href="#reinforcement-learning" title="Permanent link">&para;</a></h3>
+<p>위 방법은 강화 학습입니다. 강화학습은 GPT-3.5 에서 부터도 사용되었습니다. </p>
+<ul>
+<li><strong>인간 피드백 강화학습(RLHF)</strong>:</li>
+<li>인간 선호도 기반 Reward Model (보상 모델) 을 만들어서 보상을 줍니다. </li>
+<li>사람들이 좋아하는 답변을 유도합니다. </li>
+<li>RL 에는 모델이 편법을 익히게 되는 Reward Hacking 문제가 있어서 성공시키기가 어렵지만, 우리가 사용하는 프론티어 모델 (ex. GPT 시리즈) 들은 대부분 RLHF 를 적용을 해왔습니다. </li>
+</ul>
+<blockquote>
+<p>Incentivize 를 기반으로 한 강화학습 방법은 새로운 방법의 Scaling 입니다.</p>
+</blockquote>
+<p>모델에게 글을 읽히고, 따라하도록 하는 학습 방법에서 벗어나 모델에게 자유도를 주고 직접 창의적으로 방법을 찾게 유도하는 방법입니다.<br />
+사람을 교육하는 것에 비유해보겠습니다.<br />
+  - 사람에게 메뉴얼을 주고, 따라하도록 하는 방법을 벗어나,
+  - 사람에게 문제를 주고 창의적으로 해결하는 방법을 찾게 하는 방법입니다. </p>
+<p>"Inductive Bias" (인간이 모델에게 제시하는 가이드) 를 풀어줬다, 라고 할 수 있습니다. </p>
+<p>OpenAI 의 정형원 박사가 MIT 에서 진행한 세미나 인데, 보시는 것을 추천드립니다.  </p>
+<div style="display: flex; justify-content: center; margin: 20px 0;">
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/kYWUEV_e2ss" title="OpenAI 정형원 박사 MIT 세미나" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../model_types/" class="md-footer__link md-footer__link--prev" aria-label="이전: 모델 유형 및 특징">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                모델 유형 및 특징
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../data_preparation/dataset_creation/" class="md-footer__link md-footer__link--next" aria-label="다음: 데이터셋 준비">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                데이터셋 준비
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

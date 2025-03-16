@@ -1,0 +1,1545 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LLM Fine-Tuning 기법을 배우는 워크샵">
+      
+      
+        <meta name="author" content="Jong Hyun Park">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>Supervised Fine-Tuning (SFT) - LLM Fine-Tuning Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#supervised-fine-tuning-sft" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-header__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLM Fine-Tuning Course
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Supervised Fine-Tuning (SFT)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-nav__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLM Fine-Tuning Course
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    홈
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    기본 개념
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            기본 개념
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_background/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM Background 지식
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fine_tuning_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-Tuning 기본
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/model_types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    모델 유형 및 특징
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_paradigm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    데이터 준비
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            데이터 준비
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/dataset_creation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터셋 준비
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/templates_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    템플릿과 포맷
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    튜닝 기법
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            튜닝 기법
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../continual_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPT (Continued Pre-Training)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../supervised_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../preference_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO (Direct Preference Optimization)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../peft_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEFT 방법론
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    양자화 기법
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../korean_tuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 확장 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    모델 평가
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            모델 평가
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/llm_as_judge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/serving_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    서빙 및 최적화
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    활용 사례
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            활용 사례
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/alpaca/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpaca
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/deepseek/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/zephyr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Zephyr
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    실습 가이드
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            실습 가이드
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/gpt_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAI GPT 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_ipynb/1_openai_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT (Chat Model) 파인튜닝 하기!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/open_weight_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    오픈 웨이트 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/dpo_tutorial/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/reasoning_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    추론 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    연구 동향 및 프로젝트
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            연구 동향 및 프로젝트
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/latest_research/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    최신 연구 동향
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/license_data_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터 및 라이선스
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/competition_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    경쟁 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/domain_specific/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    도메인 특화 모델
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/jonhpark7966/courses_archive" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Other Courses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sudormrf.run/jong-hyun-park/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Author
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#sft" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 개요
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 데이터 준비
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sft_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      SFT 최적화 전략
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="supervised-fine-tuning-sft">Supervised Fine-Tuning (SFT)<a class="headerlink" href="#supervised-fine-tuning-sft" title="Permanent link">&para;</a></h1>
+<h2 id="sft">SFT 개요<a class="headerlink" href="#sft" title="Permanent link">&para;</a></h2>
+<ul>
+<li>SFT의 목적과 중요성</li>
+<li>입력-출력 매핑을 통한 학습</li>
+</ul>
+<h2 id="sft_1">SFT 데이터 준비<a class="headerlink" href="#sft_1" title="Permanent link">&para;</a></h2>
+<ul>
+<li>지시-응답 쌍 구성</li>
+<li>다양한 지시 형태 포함하기</li>
+<li>품질 중심 데이터 큐레이션</li>
+</ul>
+<h2 id="sft_2">SFT 최적화 전략<a class="headerlink" href="#sft_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li>과적합 방지 기법</li>
+<li>학습률 스케줄링</li>
+<li>조기 종료 전략 </li>
+</ul>
+<h1 id="llm-hugging-face-vs-deepspeed-vs-unsloth">대규모 언어모델(LLM) 지도 파인튜닝: Hugging Face vs. DeepSpeed vs. Unsloth<a class="headerlink" href="#llm-hugging-face-vs-deepspeed-vs-unsloth" title="Permanent link">&para;</a></h1>
+<h2 id="introduction">개요 (Introduction)<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
+<p>대규모 언어모델(LLM)의 <strong>지도 학습 기반 파인튜닝</strong>(Supervised Fine-Tuning, SFT)은 사전 학습된 모델을 새로운 데이터셋에 맞춰 미세조정하여 특정 작업 성능이나 응답 품질을 높이는 과정입니다. 특히 <strong>Decoder-Only Transformer</strong> 구조(예: GPT 계열 모델)의 파인튜닝은 주어진 프롬프트에 이어지는 다음 토큰을 예측하도록 모델을 학습시키는 형태로 이루어집니다. 최근 2년간 LLM 파인튜닝 분야에서는 <strong>모델 크기에 비해 한정된 자원으로도 효율적으로 학습</strong>할 수 있는 다양한 기법과 도구들이 등장했습니다. 본 보고서에서는 Hugging Face 생태계, Microsoft DeepSpeed, 그리고 최신 커뮤니티 툴인 Unsloth를 활용한 <strong>지도 파인튜닝 방법</strong>을 비교합니다. 또한 각 접근법의 <strong>특징과 장점</strong>, <strong>최신 연구 동향</strong>, <strong>실무 적용 예제 코드</strong>, <strong>성능 및 효율 평가 기준</strong>, <strong>Decoder-Only 최적화 기법</strong> 등을 정리합니다.</p>
+<h2 id="hugging-face-llm">Hugging Face 기반 LLM 파인튜닝<a class="headerlink" href="#hugging-face-llm" title="Permanent link">&para;</a></h2>
+<p><strong>Hugging Face</strong>의 Transformers 라이브러리는 방대한 사전학습 모델 저장소와 편리한 API를 제공하여 LLM 파인튜닝을 손쉽게 시작할 수 있게 해줍니다. PyTorch 기반으로 구현된 <code>Trainer</code> 클래스 또는 <strong>🤗 Accelerate</strong>를 통해 단일 GPU부터 분산 GPU까지 <strong>손쉬운 학습 스크립트 구성</strong>이 가능합니다. Hugging Face의 주요 강점은 <strong>광범위한 모델 지원</strong>과 <strong>커뮤니티 중심의 신속한 개선</strong>입니다. 예를 들어, 2022년 발표된 <strong>LoRA</strong>(Low-Rank Adaptation) 기 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=More%20specifically%2C%20QLoRA%20uses%204,in%20the%20original%20LoRA%20paper">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】을 빠르게 PEFT 라이브러리에 통합하고, 2023년 등장한 <strong>QLoRA</strong> 방법론도 곧바로 지원하였습니 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=LLMs%20are%20known%20to%20be,the%20QLoRA%20paper%20by%20Dettmers">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. 이를 통해 사용자는 최소한의 코드 변경만으로 최신 연구 성과를 실습에 적용할 수 있습니다.</p>
+<p>Hugging Face는 <strong>메모리 최적화</strong>를 위해 8-bit 및 4-bit 양자화(qunatization)를 지원합니다. 예를 들어 <code>transformers</code>에서 <code>from_pretrained</code> 호출 시 <code>load_in_4bit=True</code>로 설정하면, 사전학습된 모델 가중치를 4비트 정밀도로 불러올 수 있습니 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=As%20a%20quickstart%2C%20load%20a,0">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>) (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=The%20basic%20way%20to%20load,that%20will%20be%20automatically%20inferred">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. 이렇게 하면 모델 메모리 사용량을 크게 줄일 수 있어, 비교적 *<em>적은 GPU 메모리로도 대형 모델을 다룰 수 있게 됩니다</em> (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=In%20few%20words%2C%20QLoRA%20reduces,on%20a%20single%2046GB%20GPU">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. 아래 예시는 OPT-350M 모델을 4비트로 불러오는 코드입니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="s2">&quot;facebook/opt-350m&quot;</span><span class="p">,</span>
+    <span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># 4비트 양자화 로드</span>
+    <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span>   <span class="c1"># 가용 GPU 자동할당</span>
+<span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;facebook/opt-350m&quot;</span><span class="p">)</span>
+</code></pre></div>
+<p>또한 Hugging Face PEFT 라이브러리를 사용하면 <strong>LoRA 어댑터</strong>를 손쉽게 적용할 수 있습니다. LoRA는 모델의 모든 가중치를 미세조정하는 대신, <strong>일부 매트릭스에 소규모의 학습가능한 저랭크 행렬</strong>(Adapters)을 추가하여 학습하는 방법입니 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=More%20specifically%2C%20QLoRA%20uses%204,in%20the%20original%20LoRA%20paper">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. Hugging Face는 <code>peft.LoraConfig</code>와 <code>get_peft_model</code> 등을 통해 기존 모델에 LoRA 모듈을 삽입할 수 있는 API를 제공합니다. LoRA를 사용하면 파인튜닝시 <strong>메모리와 연산량을 크게 절감</strong>하면서도 원래 모델의 성능을 거의 유지할 수 있습니다. 2023년 제안된 <strong>QLoRA</strong>는 이를 한 단계 발전시켜 <strong>사전학습 모델을 4-bit로 고정</strong>하고 LoRA로만 업데이트를 수행함으로써, <strong>65억~130억급 모델도 단일 GPU로 미세조정 가능</strong>하게 만들었습니 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=In%20few%20words%2C%20QLoRA%20reduces,on%20a%20single%2046GB%20GPU">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. 실제로 QLoRA를 통해 <strong>65B 파라미터 모델을 48GB VRAM의 단일 GPU에서 풀 16비트 파인튜닝과 동등한 성능으로 학습</strong>하는 데 성공했습니 (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=enough%20to%20finetune%20a%2065B,we%20name%20Guanaco%2C%20outperforms%20all">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>) (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=QLoRA%20tuning%20is%20shown%20to,the%20power%20of%20QLoRA%20tuning">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)】. 이는 <strong>GPU 1대에서 780GB 메모리가 필요했던 작업을 48GB로 줄인 성과</strong>로, 대규모 모델 파인튜닝의 <strong>접근성을 혁신적으로 향상</strong>시켰습니 (<a href="https://ar5iv.labs.arxiv.org/html/2305.14314#:~:text=ar5iv%20ar5iv,finetunable%20on%20a%20single%20GPU">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs - ar5iv</a>)】. QLoRA의 핵심 아이디어는 <strong>NF4 (4-bit NormalFloat) 양자화</strong>와 <strong>이중 양자화(Double Quantization)</strong>, 그리고 <strong>Paged Optimizer</strong> 등을 도입하여 성능 저하 없이 메모리를 극단적으로 아낀 것입니 (<a href="https://ar5iv.org/abs/2305.14314#:~:text=We%20present%20QLoRA%2C%20an%20efficient,new%20data%20type%20that%20is">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>) (<a href="https://ar5iv.org/abs/2305.14314#:~:text=sacrificing%20performance%3A%20%28a%29%204,of">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>)】.</p>
+<p>Hugging Face 방법의 장점은 <strong>간편함과 범용성</strong>입니다. 방대한 사전학습 <strong>체크포인트를 Hugging Face Hub에서 즉시 불러와</strong> 활용할 수 있고, <strong>데이터 전처리부터 평가까지 통합된 생태계</strong>(🤗 Datasets 등)를 제공합니다. 특히 <strong>Transformer-Decorder 모델</strong>(예: GPT-2, GPT-3, LLaMA 등)의 <strong>텍스트 생성 태스크</strong>를 위한 파인튜닝 예제가 풍부하며, 학습 loop, 토크나이저, 모델 병렬화 등이 잘 추상화되어 있습니다. 기본 <code>Trainer</code>를 사용하는 예시 코드 (예: GPT-2를 텍스트 생성 데이터로 파인튜닝) 는 다음과 같습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span>
+
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;output&quot;</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">fp16</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>                      <span class="c1"># FP16 혼합 정밀도 사용</span>
+    <span class="n">logging_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">save_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+    <span class="n">deepspeed</span><span class="o">=</span><span class="kc">None</span>                  <span class="c1"># (DeepSpeed 사용시 설정 파일 경로 지정)</span>
+<span class="p">)</span>
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span> 
+                  <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_ds</span><span class="p">,</span> <span class="n">eval_dataset</span><span class="o">=</span><span class="n">eval_ds</span><span class="p">,</span> 
+                  <span class="n">data_collator</span><span class="o">=</span><span class="n">data_collator</span><span class="p">)</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div>
+<blockquote>
+<p><strong>참고:</strong> 상기 코드에서 <code>deepspeed=None</code>로 두면 Hugging Face의 기본 Trainer로 학습합니다. DeepSpeed를 사용하려면 <code>deepspeed="ds_config.json"</code>처럼 설정 파일을 지정하거나 🤗 Accelerate를 사용합니다 (아래 DeepSpeed 섹션 참고).</p>
+</blockquote>
+<p>Hugging Face 기반 접근의 단점이라면, <strong>아주 큰 모델을 다룰 때는 기본 환경으로는 한계</strong>가 있다는 것입니다. 예를 들어 수십억~수백억 파라미터 모델을 전체 미세조정(full fine-tuning)하려면 멀티 GPU가 필수이며, 이 경우 <strong>DeepSpeed나 FSDP</strong> 등의 보조가 필요할 수 있습니다. 하지만 중소규모 모델이나 LoRA같은 파라미터 효율 기법을 사용한다면 Hugging Face만으로도 충분히 실험이 가능합니다. 결과적으로 Hugging Face는 <strong>연구 개발의 출발점</strong>으로서 최신 기법들을 빠르게 받아들이고 있어, <strong>실무에서도 가장 널리 쓰이는 LLM 파인튜닝 플랫폼</strong>입니다.</p>
+<h2 id="deepspeed">DeepSpeed를 활용한 대규모 모델 파인튜닝<a class="headerlink" href="#deepspeed" title="Permanent link">&para;</a></h2>
+<p><strong>DeepSpeed</strong>는 마이크로소프트가 개발한 <strong>대규모 분산 학습 최적화 라이브러리</strong>로, 특히 거대 언어모델의 학습을 <strong>속도와 스케일</strong> 측면에서 지원합니다. DeepSpeed의 핵심에는 <strong>ZeRO (Zero Redundancy Optimizer)</strong> 알고리즘이 있 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)10】. ZeRO는 데이터 병렬 학습 시 각 GPU에 동일하게 복제되던 <strong>옵티마이저 상태, 그래디언트, 모델 파라미터</strong>를 shard(분할)하여 <strong>GPU들 간에 분산 저장</strong> (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)10】. 이렇게 하면 중복으로 메모리를 잡아먹는 요소가 사라져, <strong>모델 크기가 커져도 메모리 효율적으로 분산</strong>시킬 수 있습니다. ZeRO는 단계별로 발전되어 <strong>Stage 1</strong>(옵티마이저 상태 분산), <strong>Stage 2</strong>(+ gradient 분산), <strong>Stage 3</strong>(+ 파라미터 자체 분산)으로 구분되며, Stage 숫자가 높을수록 GPU 메모리 부담이 감소 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)10】. 특히 <strong>ZeRO-3</strong>는 모든 모델 파라미터를 모든 GPU에 나누어 올려놓고 필요 시 동적으로 불러쓰는 방식으로, <strong>개별 GPU에는 전체 모델의 일부만 상주</strong>하게 됩니다. 이를 통해 예를 들어 <strong>70억~130억 개 파라미터 모델을 단일 또는 소수 GPU에서 학습</strong>시키는 것이 가능해졌 (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)09】. DeepSpeed 팀의 튜토리얼에 따르면, ZeRO-Offload 기능까지 활용하면 <strong>10억~13억 파라미터 GPT-2 모델도 단일 32GB GPU에서 학습</strong>할 수 있 (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)09】. 아래는 DeepSpeed의 ZeRO-Offload를 통한 단일 GPU 대용량 모델 학습 사례입니다:</p>
+<ul>
+<li><em>“ZeRO-Offload는 옵티마이저 메모리와 연산을 CPU로 오프로드하여, 최대 130억 파라미터에 달하는 큰 모델도 단일 GPU에서 효율적으로 학습할 수 있게 해 (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)09】.”</em></li>
+</ul>
+<p>DeepSpeed의 또 다른 강점은 <strong>병렬화와 최적화 전략의 다양성</strong>입니다. 모델 병렬화, 파이프라인 병렬화, mixed precision 연산, Gradient Accumulation 등의 기법을 통합적으로 지원하여 <strong>GPU 여러 대를 최대한 활용</strong>할 수 있습니다. 또한 <strong>CPU Offloading</strong>(ZeRO-Offload)과 <strong>NVMe Offloading</strong>(ZeRO-Infinity)을 통해, GPU 메모리가 부족할 경우 <strong>일부 데이터(예: 모델 가중치나 옵티마이저 상태)를 CPU RAM이나 SSD로 분산</strong>시킴으로써 <strong>사실상 무제한에 가까운 모델 사이즈</strong>까지도 학습을 시도할 수 있 (<a href="https://www.microsoft.com/en-us/research/blog/zero-infinity-and-deepspeed-unlocking-unprecedented-model-scale-for-deep-learning-training/#:~:text=ZeRO,Infinity%20include">ZeRO-Infinity and DeepSpeed: Unlocking unprecedented model scale for deep learning training - Microsoft Research</a>) (<a href="https://www.microsoft.com/en-us/research/blog/zero-infinity-and-deepspeed-unlocking-unprecedented-model-scale-for-deep-learning-training/#:~:text=,efficiency%20and%20superlinear%20throughput%20scaling">ZeRO-Infinity and DeepSpeed: Unlocking unprecedented model scale for deep learning training - Microsoft Research</a>)94】. 이러한 극단적 확장성 덕분에 DeepSpeed는 GPT-3(175B) 급 모델 학습이나 수조 개 파라미터 실험처럼 <strong>최첨단 스케일의 연구에 필수적인 도구</strong>로 자리잡았습니다.</p>
+<p>DeepSpeed를 실무에 활용하려면 <strong>설정 파일과 런처</strong>를 사용하는 방식이 일반적입니다. Hugging Face Trainer에도 <code>deepspeed</code> 인자를 통해 DeepSpeed를 통합할 수 있으며, <strong>🤗 Accelerate 툴을 쓰면 대화형으로 설정 파일을 생성</strong>할 수  (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=Configuration">DeepSpeed</a>) (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=accelerate%20config%20">DeepSpeed</a>)164】. 예를 들어, 아래와 같은 DeepSpeed 설정(<code>ds_config.json</code>)을 준비하여 Trainer에 전달하면 ZeRO 기반 훈련이 이루어집니다:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;zero_optimization&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;stage&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;offload_param&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;device&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;cpu&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;fp16&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>위 설정은 ZeRO-3 단계에서 <strong>모델 파라미터를 CPU로 오프로드</strong>하도록 지정한 예시입니다. <code>TrainingArguments(..., deepspeed="ds_config.json")</code> 처럼 설정하면 Hugging Face Trainer가 내부적으로 DeepSpeed 엔진을 초기화하여 학습을 진행합니다. 또는 <strong><code>deepspeed.init</code> API를 직접 사용</strong>해 모델, 옵티마이저를 감싼 뒤 <code>deepspeed.run</code>으로 훈련 loop을 구현할 수도 있습니다. 어떤 방법이든, <strong>기존 PyTorch 코드를 크게 변경하지 않으면서</strong> DeepSpeed의 이점을 얻을 수 있다는 것이 장점입니다.</p>
+<p>DeepSpeed와 Hugging Face PEFT를 <strong>조합하여 사용</strong>하는 것도 가능합니다. 예를 들어 <strong>LoRA 적용 모델을 DeepSpeed ZeRO-3로 분산 학습</strong>하거나, <strong>QLoRA(4비트 + LoRA)</strong>를 DeepSpeed와 함께 활용하여 다중 GPU에서 초거대 모델을 학습하는 실험들이 보고되 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=For%20DeepSpeed%20Stage%203%20%2B,models%20on%20multiple%20GPUs%20below">DeepSpeed</a>) (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=This%20section%20of%20guide%20will,by%20changing%20the%20accelerate%20config">DeepSpeed</a>)142】. Hugging Face 가이드에서는 <strong>8x H100 (80GB) GPU로 LLaMA-70B 모델을 LoRA+ZeRO-3 설정으로 SFT(지도파인튜닝)하는 예시</strong>를 제공하고  (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=This%20section%20of%20guide%20will,by%20changing%20the%20accelerate%20config">DeepSpeed</a>) (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=accelerate%20config%20">DeepSpeed</a>)164】. 이처럼 DeepSpeed는 Hugging Face 생태계와도 잘 맞물려 동작하며, 파인튜닝 <strong>속도 및 확장성</strong>을 높이는 역할을 합니다.</p>
+<p>정리하면, DeepSpeed의 특징과 장점은 다음과 같습니다:</p>
+<ul>
+<li><strong>ZeRO 알고리즘</strong>을 통한 <strong>메모리 최적화 및 모델 분산</strong>: 동일 자원으로 더 큰 모델 학 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)110】 </li>
+<li><strong>CPU/NVMe 오프로드</strong>로 단일 GPU 메모리 한계 (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)109】 </li>
+<li><strong>고도화된 분산 병렬 학습</strong> 지원: 수십~수백 GPU까지 효율적 스케일 아웃</li>
+<li><strong>성능 최적화 커널</strong> 제공: DeepSpeed의 CPU Adam 옵티마이저는 기본 PyTorch 대비 5~7 (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=For%20large%20model%20training%2C%20optimizers,please%20see%20our%20blog%20post">ZeRO-Offload - DeepSpeed</a>)119】 등</li>
+</ul>
+<p>단점으로는 <strong>환경 설정의 복잡성</strong>이 있습니다. 설정 파일 작성, 런처 명령 등 처음 사용시 진입장벽이 있으며, 작은 규모 실험에는 과한 측면이 있을 수 있습니다. 또한 <strong>동일한 연산이라도 약간의 오버헤드</strong>(통신 대기 등)가 존재하므로, 모델이 충분히 크거나 분산이 필요한 경우에 가장 큰 효과를 봅니다. 그럼에도, <strong>실무에서 수십억~수천억 파라미터</strong> 모델을 다뤄야 한다면 DeepSpeed는 사실상 <strong>표준 도구</strong>로 자리잡았습니다.</p>
+<h2 id="unsloth-llm">Unsloth를 활용한 고속 LLM 파인튜닝<a class="headerlink" href="#unsloth-llm" title="Permanent link">&para;</a></h2>
+<p><strong>Unsloth</strong>는 2023년 커뮤니티에서 등장한 <strong>경량화 LLM 파인튜닝 라이브러리</strong>로, <strong>“Hugging Face 호환”</strong>을 표방하면서도 <strong>학습 속도를 2배 이상 높이고 메모리 사용을 40~70% 줄이는</strong> 혁신을 보여주고  (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20was%20benchmarked%20across%2059,are%20in%20Unsloth%E2%80%99s%20benchmarking%20details">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L92】. Unsloth의 접근법은 기존 Hugging Face <code>Transformers</code> 모델의 일부 연산을 <strong>Triton</strong> 기반의 맞춤 커널로 대체하여 <strong>PyTorch 수준에서의 비효율을 제거</strong>하는  (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L72】. 구체적으로, <strong>Self-Attention, FFN 등 Transformer 핵심 모듈의 backward 연산을 수식으로 직접 유도</strong>하여 Triton으로 구현함으로써, 같은 작업을 하면서도 <strong>메모리 복사나 중간 연산 overhead를 최소화</strong> (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L72】. 이런 <strong>수동 최적화(manual backprop)</strong> 기법 덕분에, <strong>동일한 QLoRA 파인튜닝이라도 Unsloth 사용 시 학습 속도가 약 2배로 향상되고 GPU VRAM 사용은 절반 이하로 감소</strong>하는 결과를 얻 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Llama,18.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L88】. 놀랍게도 <strong>모델의 최종 성능 저하가 0%</strong>임이 검증되었는데, 이는 Unsloth의 커널 최적화가 근본적으로 <strong>동일한 계산을 더 효율적으로 구현</strong>한 것이므로 정확도가 보존되기 때 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L68】.</p>
+<p>Unsloth는 <strong>Hugging Face와의 호환성</strong>을 강조합니다. 사용법도 매우 비슷하여, <code>FastLanguageModel.from_pretrained()</code> 함수로 모델을 불러오면 내부적으로 <code>transformers</code> 모델을 래핑한 Unsloth 모델 객체와 토크나이저를 반 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=,returns%20the%20model%20tokenizer%20for">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=model%2C%20tokenizer%20%3D%20FastLanguageModel,RoPE%20Scaling%20internally%2C%20so%20choose">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)L22】. 예를 들어 다음과 같이 LLaMA 계열 모델을 Unsloth로 로드할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">unsloth</span> <span class="kn">import</span> <span class="n">FastLanguageModel</span>
+
+<span class="n">model</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">FastLanguageModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;unsloth/mistral-7b-bnb-4bit&quot;</span><span class="p">,</span>  <span class="c1"># HF 허브 모델명 (4-bit 양자화된 Mistral 7B)</span>
+    <span class="n">max_seq_length</span><span class="o">=</span><span class="mi">2048</span>                       <span class="c1"># 최대 시퀀스 길이 (RoPE 스케일링 자동적용)</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>불러온 모델은 Hugging Face <code>transformers</code>와 거의 동일한 인터페이스를 제공하므로, <code>transformers.Trainer</code>나 🤗 TRL의 <code>SFTTrainer</code> 등에 그대로 넣어서 사용할 수 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20is%20a%20lightweight%20library,and%20Mistral%20architectures">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=most%20NVIDIA%20GPUs%20%E2%80%93from%20GTX,and%20Mistral%20architectures">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L66】. Unsloth는 현재 <strong>LLaMA 계열(Llama-2, CodeLlama 등)과 Mistral, Qwen 등 GPT 유사 아키텍처</strong>를 지원하며, 다양한 NVIDIA GPU(예: GTX 16GB급부터 A100/H100까지)에서  (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20is%20a%20lightweight%20library,and%20Mistral%20architectures">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L63】. 특히 <strong>FP16, BF16 혼합정밀도</strong>도 옵션으로 켤 수 있고, <strong>양자화된 모델(<code>bnb-4bit</code>)도 직접 로드</strong>할 수 있어 (bitsandbytes 라이브러리 필요), Hugging Face에서 하던 4-bit QLoRA 파인튜닝을 거의 그대로 진행하면서 성능 향상을 누릴 수 있습니다.</p>
+<p>Unsloth의 특기할 만한 기능 중 하나는 <strong>RoPE Scaling</strong>을 자동 처리하는 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=,returns%20the%20model%20tokenizer%20for">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L15】. RoPE(Rotary Positional Embedding)는 GPT 계열에서 쓰이는 위치인코딩 기법인데, Unsloth 모델 로드시 <code>max_seq_length</code>를 크게 지정하면 <strong>학습 시 더 긴 문맥길이</strong>를 사용할 수 있도록 내부적으로 주파수를 스케일링해 줍니다. 이를 통해 본래 2048 토큰까지였던 LLaMA-2 모델도 <strong>최대 4배 이상 긴 컨텍스트까지</strong> 파인튜닝할 (<a href="https://docs.unsloth.ai/get-started/fine-tuning-guide#:~:text=,tuning">Fine-tuning Guide | Unsloth Documentation</a>)L163】, 일부 최신 모델(Llama-3.3 70B 등)은 Unsloth로 <strong>8만~3십만 토큰 이상의 문맥 학습</strong>도 시도되고 (<a href="https://github.com/unslothai/unsloth#:~:text=with%20Llama%20%26%20Qwen%20distillations,13x%20longer">GitHub - unslothai/unsloth: Finetune Llama 3.3, DeepSeek-R1 &amp; Reasoning LLMs 2x faster with 70% less memory! </a>)L308】. 긴 문맥 대응은 <strong>Decoder-Only 모델의 실제 활용도</strong>를 높이는 중요한 최적화인데, Unsloth가 이를 편리하게 지원하는 점은 실용적 장점이라 할 수 있습니다.</p>
+<p>요약하면 Unsloth의 특징과 장점:</p>
+<ul>
+<li><strong>Triton 커널 기반 최적화</strong>로 <strong>학습속도 ~2배 향상</strong>, **메모리 ~50% (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Llama,18.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L88】 (동일 하드웨어/모델 대비)</li>
+<li>Hugging Face **Transformers/PEFT와 완전 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20is%20a%20lightweight%20library,and%20Mistral%20architectures">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L63】 – 친숙한 API로 사용 가능</li>
+<li><strong>QLoRA(4-bit + LoRA) 지원</strong> – 저자들이 제공한 다이나믹 4비트 양자화로 QLoRA의 미세 성능 저하 (<a href="https://docs.unsloth.ai/get-started/fine-tuning-guide#:~:text=improves%20accuracy%20%281%E2%80%932">Fine-tuning Guide | Unsloth Documentation</a>) (<a href="https://docs.unsloth.ai/get-started/fine-tuning-guide#:~:text=We%20recommend%20starting%20with%20QLoRA%2C,LoRA%20is%20now%20largely%20recovered">Fine-tuning Guide | Unsloth Documentation</a>)L174】</li>
+<li><strong>RoPE 등 Decoder용 추가 기능</strong> – 문맥길이 확장 등 디코더 Transformer에 유용한 최적화 제공</li>
+<li><strong>오픈소스 개발 활성화</strong> – 콜랩 노트북, 벤치마크 스크립트 공개 등으로 재현성과 접 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20was%20benchmarked%20across%2059,are%20in%20Unsloth%E2%80%99s%20benchmarking%20details">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L92】</li>
+</ul>
+<p>Unsloth의 현재 한계로는 <strong>지원 아키텍처가 제한적</strong>이라는 점이 있습니다. 주로 Meta의 Llama 계열과 그 파생모델에 집중되어 있고, Transformer 구조가 다른 T5(Encoder-Decoder)나 GLM 양방향 모델 등은 지원하지 않습니다. 또한 분산 학습(멀티 GPU)에 대한 언급이 적은데, 주로 단일 GPU에서의 극한 최적화에 초점이 맞춰져 있습니다. 따라서 아주 큰 모델을 여러 GPU에 나누어 학습하는 용도는 DeepSpeed만큼 주안점은 아닐 수 있습니다. 그럼에도 <strong>단일/소수 GPU로 LLM을 최대한 빠르게 튜닝</strong>해야 하는 실무 상황에서 Unsloth는 대단히 매력적인 선택지입니다. 예컨대, 1장의 A100으로 하루 걸리던 파인튜닝 작업을 Unsloth로 반나절에 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L77】, 같은 GPU에서 더 큰 배치 사이즈나 더 긴 문맥을 실험할 여유를 얻을 수 있습니다. 이것은 곧 <strong>개발 생산성과 실험 범위의 확대</strong>로 이어지므로, 앞으로 Unsloth와 같은 최적화 툴의 활용도는 더욱 높아질 전망입니다.</p>
+<h2 id="_1">성능 비교 및 평가 방법<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>LLM 파인튜닝 기법들을 평가할 때에는 <strong>모델의 최종 성능</strong> 뿐 아니라 <strong>학습 효율 지표</strong>들도 중요합니다. 주요 비교 기준은 <strong>메모리 사용량(VRAM)</strong>, <strong>학습 속도(throughput)</strong>, <strong>학습 안정성 및 효율성</strong> 등이 있습니다. 아래 표는 Hugging Face 기본 방법, DeepSpeed, Unsloth의 주요 특징과 성능 상의 장단점을 정리한 것입니다:</p>
+<table>
+<thead>
+<tr>
+<th>접근법</th>
+<th>주요 특징 및 최적화</th>
+<th>메모리 사용량</th>
+<th>학습 속도</th>
+<th>비고 (장단점 요약)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hugging Face 기본</strong></td>
+<td>- Pretrained 모델/데이터 에코시스템<br>- Trainer/Accelerate 통한 손쉬운 구현<br>- PEFT: LoRA, P-Tuning 등 지원<br>- 8/4-bit 양자화 로드 지원</td>
+<td>기준 (100%)</td>
+<td>기준 (1×)</td>
+<td>쉬운 구현과 커뮤니티 지원이 강점. 대형 모델은 추가 최적화 필요 (예: DeepSpeed 통합 가능).</td>
+</tr>
+<tr>
+<td><strong>DeepSpeed (ZeRO)</strong></td>
+<td>- ZeRO-1/2/3 옵티마 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)L110】<br>- CPU/NVMe Offlo (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)L109】<br>- 병렬화 최적 튜닝 (일괄 통신, One-bit Adam 등)<br>- 분산 훈련에 특화</td>
+<td><strong>매우 적음</strong> (파라미터/그래디언트 분산으로 GPU당 부 (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>)L110】</td>
+<td><strong>높음</strong> (멀티 GPU로 선형 스케일링, 단일 GPU에선 다소 오버헤드)</td>
+<td>초대형 모델 학습 가능 (수십억~수천억↑  (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)L109】. 초기 설정 복잡하지만, 대규모 실험엔 필수 도구.</td>
+</tr>
+<tr>
+<td><strong>Unsloth (QLoRA 기반)</strong></td>
+<td>- Triton 커널로 모델 연 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L72】<br>- 수동 backprop으로 메모리 절약<br>- RoPE 스케일링으로 문맥 확장<br>- HF Transformers와 호환 API</td>
+<td><strong>적음</strong> (동일 QLoRA 대비 VRAM 최대 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20was%20benchmarked%20across%2059,are%20in%20Unsloth%E2%80%99s%20benchmarking%20details">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L92】)</td>
+<td><strong>매우 높음</strong> (동일 QLoRA 대비 ~ (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L77】)</td>
+<td>단일/소수 GPU 환경에 최적화. 정확도 손실 없이  (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L68】. 지원 모델 한정적이나 빠르게 확대 중.</td>
+</tr>
+</tbody>
+</table>
+<p><em>표: Hugging Face vs. DeepSpeed vs. Unsloth의 특징 및 효율 비교</em></p>
+<p>위 비교에서 보듯이, <strong>Hugging Face + 기본 PyTorch</strong>는 구현 편의성 측면에서 뛰어나나 <strong>대형 모델 학습 시 메모리 병목</strong>이 있을 수 있습니다. DeepSpeed는 이를 해소하여 <strong>모델 사이즈 한계를 크게 높여주지만</strong>, 구성 복잡성과 <strong>통신 오버헤드</strong>가 약간 존재합니다. Unsloth는 <strong>낮은 수준의 커스터마이징을 통해</strong> 가장 많이 쓰이는 시나리오(예: LLaMA 계열의 SFT)에서 <strong>최대의 속도/메모리 효율</strong>을 끌어올린 사례입니다. 특히 QLoRA처럼 <strong>4-bit 양자화로 인한 16-bit 대비 약간의 속도 저하</strong>가 원래 (<a href="https://lightning.ai/pages/community/lora-insights/#:~:text=Code%20Framework,which%20is%20to%20be">Finetuning LLMs with LoRA and QLoRA: Insights from Hundreds of ...</a>) (<a href="https://ar5iv.labs.arxiv.org/html/2305.14314#:~:text=a%20significant%20shift%20in%20accessibility,finetunable%20on%20a%20single%20GPU">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs - ar5iv</a>)-L57】, Unsloth 최적화로 이러한 <strong>양자화 오버헤드까지 상쇄</strong>한 것이 큰 장점입니다.</p>
+<p><strong>평가 방법</strong>으로, <strong>메모리 사용량</strong>은 일반적으로 <strong>훈련 중 최대 GPU VRAM 점유</strong>를 측정합니다 (예: <code>nvidia-smi</code> 모니터링). DeepSpeed의 경우 ZeRO-3를 쓰면 각 GPU가 모델 일부만 갖고 있으므로 개별 GPU 메모리 사용량이 크게 줄고, 나머지는 CPU/NVMe 사용량으로  (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=GPU%20Peak%20Memory%20consumed%20during,begin%29%3A%200">DeepSpeed</a>) (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=GPU%20Peak%20Memory%20consumed%20during,begin%29%3A%200">DeepSpeed</a>)-L20】. <strong>처리 속도</strong>는 보통 <strong>초당 처리 토큰 수 (tokens per second)</strong> 또는 <strong>스텝당 시간</strong>으로 산출합니다. 같은 하드웨어에서 배치당 토큰 throughput을 비교하면 최적화 효과를 정량화할 수 있습니다. 예컨대, Unsloth 팀은 다양한 모델/데이터셋에 대해 <strong>초당 토큰 처리량</strong>을 측정하여 Hugging Face 대비 <strong>1.5×~2.7× 속도 향상</strong>을 보고 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Free%20Colab%20T4%20Dataset%20Hugging,18.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L87】.</p>
+<p>학습 효율 이외에, <strong>모델 성능 평가</strong> 또한 필수입니다. 모델이 지도파인튜닝을 통해 목표 작업에 얼마나 향상되었는지, 또는 혹시 <strong>기존 지식을 훼손</strong>하지 않았는지 등을 확인해야 합니다. <strong>Decoder-Only LLM</strong>의 경우 일반적으로 <strong>텍스트 생성 품질</strong>이나 <strong>다양한 다운스트림 태스크 성능</strong>으로 평가합니다. 예를 들어, <strong>지도학습으로 대화형 모델</strong>을 튜닝했다면 <strong>ChatGPT와 유사한 벤치마크(Vicuna Benchmark 등)</strong>에서 대화 품질을 측정하거나, Human 평가 혹은 GPT-4를 활용한 비교 평가를 수행할 수 (<a href="https://ar5iv.org/abs/2305.14314#:~:text=full%2016,innovations%20to%20save%20memory%20without">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>) (<a href="https://openreview.net/pdf?id=OUIFPHEgJU#:~:text=on%20the%20Vicuna%20,Table%204"></a>)L107】. QLoRA 논문에서는 <strong>GPT-4 기반 자동 평가</strong>를 통해, 65B 모델을 QLoRA로 미세조정한 Guanaco가 ChatGPT 대비 99.3% 수준에 도달했음을  (<a href="https://ar5iv.org/abs/2305.14314#:~:text=full%2016,innovations%20to%20save%20memory%20without">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>)-L18】. 이처럼 <strong>모델 출력의 정량·정성 평가</strong>를 통해 파인튜닝의 효과를 검증해야 합니다. 또한 <strong>perplexity</strong>(언어모델의 로그확률 지표)도 사용되는데, 원래 모델 대비 퍼플렉서티 변화로 <strong>과적합 여부나 일반화 성능</strong>을 가늠할 수 있습니다. 최신 연구에 따르면 <strong>파인튜닝 데이터의 품질이 데이터량보다 중요</strong>하며, 고품질 소량 데이터로도 강력한 성능을 낼 수 (<a href="https://openreview.net/pdf?id=OUIFPHEgJU#:~:text=Guanaco%2C%20,strong%20Vicuna%20chatbot%20benchmark%20performance"></a>) (<a href="https://openreview.net/pdf?id=OUIFPHEgJU#:~:text=analyze%20trends%20in%20the%20trained,strong%20Vicuna%20chatbot%20benchmark%20performance"></a>)L142】. Meta의 <strong>LIMA 연구(2023)</strong>에서는 LLaMA 65B 모델을 <strong>엄선된 1000개의 예시</strong>만으로 지도학습 파인튜닝 하였을 때 GPT-4 등 거대 모델에 필적하는 성능을 달성하기도 (<a href="https://huggingface.co/papers/2305.11206#:~:text=Face%20huggingface,learning%20or%20human%20preference%20modeling">Paper page - LIMA: Less Is More for Alignment - Hugging Face</a>)-L18】. 이는 <strong>사전학습된 거대 LM의 잠재력을 끌어내는 데 있어, 방대한 양의 미세조정 데이터보다 인간 전문가가 고른 핵심 데이터가 효과적</strong>일 수 있음을 시사합니다.</p>
+<p>마지막으로, <strong>Decoder-Only Transformer 최적화 기법</strong>들을 정리하면 다음과 같습니다:</p>
+<ul>
+<li><strong>양자화(Quantization)</strong>: 16-bit 대신 8-bit, 4-bit로 모델 가중치를 표현해 메모리 감소 (예: QLoRA의 4-bit NF (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=In%20few%20words%2C%20QLoRA%20reduces,on%20a%20single%2046GB%20GPU">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)L205】. 적절한 양자화는 <strong>성능 유지하면서 메모리 4배 절약</strong> 가능.</li>
+<li><strong>파라미터 효율 기법(PEFT)</strong>: (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=More%20specifically%2C%20QLoRA%20uses%204,in%20the%20original%20LoRA%20paper">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)L210】, Adaptor, Prefix-Tuning 등으로 <strong>소수의 파라미터만 학습</strong>하여 연산/메모리 효율 개선.</li>
+<li><strong>Flash Attention 등 메모리 효율 Attention</strong>: 시퀀스 길이가 길어질 때 메모리 사용을 줄이고 속도를 높이는 <strong>최적화 Attention 알고리즘</strong>. PyTorch 2.x에서는 이러한 <strong>SDPA(Scaled Dot-Product Attention)</strong>가 기본 통합되어 있어 성능 향 (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20was%20benchmarked%20across%2059,are%20in%20Unsloth%E2%80%99s%20benchmarking%20details">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L92】.</li>
+<li><strong>Gradient Checkpointing</strong>: 중간 활성값을 저장하지 않고 재계산하는 기법으로, <strong>GPU 메모리 사용을 큰 폭으로 절감</strong> (대신 계산량 증가). 대형 모델 파인튜닝에 거의 필수적으로 쓰입니다.</li>
+<li><strong>Mixed Precision Training</strong>: FP32 대신 <strong>FP16/BF16</strong> 등을 사용하여 <strong>연산 속도와 메모리 사용 최적화</strong>. 최근 GPU는 BF16/FP16 성능이 뛰어나므로, 정확도에 큰 문제없이 활용.</li>
+<li><strong>분산 병렬화</strong>: 모델 병렬화(레이어를 여러 GPU에 분할), 데이터 병렬화, 파이프라인 병렬화 등 조합으로 <strong>하드웨어 자원 활용 극대화</strong>. DeepSpeed, FSDP, Megatron-LM 등이 지원.</li>
+<li><strong>동적 장비 메모리 활용</strong>: GPU와 CPU, 디스크를 모두 활용하여 <strong>계산 자원 대비 최대 메모리 활용</strong> (ZeRO-Offload/Infinit (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)L109】.</li>
+<li><strong>최신 옵티마이저 사용</strong>: AdamW 외에 LAMB, Lion 등의 대안 옵티마이저나, DeepSpeed의 One-bit Adam처럼 <strong>통신량을 줄인 분산 옵티마이저</strong>로 효율 개선.</li>
+<li><strong>정규화 및 안정화 기법</strong>: 대규모 LM 파인튜닝 시 <strong>러닝레이트 워밍업</strong>, <strong>학습률 스케줄</strong>, <strong>Gradient Clipping</strong> 등으로 안정적 수렴을 도모. 이는 간접적으로 효율(재시도 감소 등)에 기여.</li>
+<li><strong>Continuous Pretraining과 SFT 결합</strong>: 경우에 따라 <strong>사전학습 연장(Continued Pretraining)</strong> 후 SFT를 하면 더 좋은 결과를 얻거나, SFT 도중 <strong>기존 지식 유지</strong>를 위한 <strong>混合 사전학습 데이터 사용</strong> 등의 기법도 연구되고 (<a href="https://docs.unsloth.ai/get-started/fine-tuning-guide#:~:text=the%20accuracy%20loss%20for%20QLoRA,LoRA%20is%20now%20largely%20recovered">Fine-tuning Guide | Unsloth Documentation</a>)L174】.</li>
+</ul>
+<h2 id="_2">최신 연구 동향 및 결론<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>최근 2년간 LLM 파인튜닝 분야는 <strong>“더 적은 자원으로 더 큰 모델을 효과적으로 다루는 법”</strong>에 집중되어 왔습니다. <strong>QL (<a href="https://ar5iv.org/abs/2305.14314#:~:text=We%20present%20QLoRA%2C%20an%20efficient,innovations%20to%20save%20memory%20without">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>)-L18】의 등장으로 촉발된 </strong>저비트 양자화 + 어댑터 학습<strong> 패러다임은 현재 업계 표준으로 자리잡았고, 이를 넘어 </strong>아직 실험 단계인 3비트, 2비트<strong> 미세튜닝 연구도 진행중입니다. 또한 </strong>LORA의 변형<strong>으로서 중요도가 높은 레이어에 가중치를 더 할당하는 </strong>AdaLoRA<strong> 등의 기법도 제안되었습니다. 한편, </strong>파인튜닝 데이터 확보<strong> 측면에서는 Stanford의 </strong>Alpaca<strong> 프로젝트처럼 </strong>기존 모델(예: GPT-3)를 이용한 Self-Instruct 데이터 생성<strong>이 유행하여, 비교적 저렴하게 지도학습 데이터를 모으는 흐름이 있습니다. 이를 통해 탄생한 </strong>Vicuna<strong>, </strong>WizardLM<strong>, </strong>OpenAssistant<strong> 등의 </strong>오픈소스 대화형 모델<strong>들은 모두 공개 데이터나 생성 데이터로 SFT된 사례들입니다. 성능 면에서, 앞서 언급한 </strong>LIMA (Less is More for Alignme (<a href="https://huggingface.co/papers/2305.11206#:~:text=Face%20huggingface,learning%20or%20human%20preference%20modeling">Paper page - LIMA: Less Is More for Alignment - Hugging Face</a>)-L18】 연구는 <strong>고품질 소규모 데이터의 위력</strong>을 보여주었고, OpenAI도 <strong>InstructGPT 논문(2022)</strong>에서 인간 피드백 외에 <strong>초기 단계의 슈퍼바이즈드 파인튜닝(SFT)</strong>이 핵심적으로 중요함을 밝힌 바 있습니다. 최근에는 <strong>RLHF</strong>(강화학습 휴먼 피드백) 대신 <strong>DPO</strong>(Direct Preference Optimization)나 <strong>RLAIF</strong>(AI 피드백) 등 <strong>순수 지도 신호만으로 선호도를 학습</strong>하려는 시도도 나오고 있어, <strong>지도 파인튜닝의 범위가 확장</strong>되고 있습니다.</p>
+<p>정리하면, <strong>Decoder-Only LLM의 지도 파인튜닝</strong>은 여전히 <strong>모델 성능 개선과 효율적 학습</strong>을 양립하기 위한 다양한 연구로 활발히 진화하고 있습니다. Hugging Face, DeepSpeed, Unsloth와 같은 도구들은 이러한 연구 성과를 현업에 적용하는 다리 역할을 하며, 각기 <strong>사용자 요구와 환경에 맞는 솔루션</strong>을 제공합니다. 실무에서는 세 가지 접근법을 <strong>상황에 따라 조합</strong>하기도 합니다. 예를 들어, <strong>중간 규모 모델은 Unsloth로 싱글 GPU 빠르게 튜닝</strong>하고, <strong>초거대 모델은 DeepSpeed로 멀티 GPU 분산 학습</strong>하며, 전반적인 워크플로우는 Hugging Face 에코시스템으로 관리하는 식입니다. 중요한 것은 <strong>모델의 목표와 제약에 맞춰 최적의 기법을 선택</strong>하는 것입니다. 앞으로도 하드웨어와 알고리즘 측면의 발전으로 LLM 파인튜닝은 더욱 최적화되고 대중화될 것이며, <strong>“더 낮은 비용으로 더 똑똑한 모델”</strong>을 만드는 방향으로 나아갈 것입니다.</p>
+<p><strong>참고 문헌 및 링크:</strong> 최신 파인튜닝 기법과 사례에 대한 자세한 내용은 Hugging Face 블로그 및 각 논문의 원문을 참고하시기 바랍니다. 아래는 본 문서에서 언급된 자료들의 출처입니다.</p>
+<ul>
+<li>Hugging Face 블로그: *Making LLMs even more accessible with 4-bit quantization and Q (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=In%20few%20words%2C%20QLoRA%20reduces,on%20a%20single%2046GB%20GPU">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>) (<a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes#:~:text=QLoRA%20tuning%20is%20shown%20to,the%20power%20of%20QLoRA%20tuning">Making LLMs even more accessible with bitsandbytes, 4-bit quantization and QLoRA</a>)L222】</li>
+<li>Hugging Face 블로그: *Make LLM fine-tuning 2x faster with Unsloth and (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=Unsloth%20works%20by%20overwriting%20some,made%20in%20the%20optimized%20code">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L80】</li>
+<li>Hugging Face Docs: *DeepSpeed &amp; Accelerate Integration G (<a href="https://huggingface.co/docs/peft/main/en/accelerate/deepspeed#:~:text=DeepSpeed%20is%20a%20library%20designed,leveraging%20CPU%20resources%20during%20optimization">DeepSpeed</a>) (<a href="https://www.deepspeed.ai/tutorials/zero-offload/#:~:text=ZeRO,No%20code%20changes%20are%20needed">ZeRO-Offload - DeepSpeed</a>)L109】</li>
+<li>Unsloth 공식 문 (<a href="https://docs.unsloth.ai/get-started/fine-tuning-guide#:~:text=,tuning">Fine-tuning Guide | Unsloth Documentation</a>) (<a href="https://huggingface.co/blog/unsloth-trl#:~:text=1%20A100%2040GB%20Dataset%20Hugging,11.6">Make LLM Fine-tuning 2x faster with Unsloth and  TRL</a>)-L77】</li>
+<li>QLoRA 논문 (Dettmers et al.,  (<a href="https://ar5iv.org/abs/2305.14314#:~:text=We%20present%20QLoRA%2C%20an%20efficient,innovations%20to%20save%20memory%20without">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>) (<a href="https://ar5iv.org/abs/2305.14314#:~:text=sacrificing%20performance%3A%20%28a%29%204,of">[2305.14314] QLoRA: Efficient Finetuning of Quantized LLMs</a>)-L27】</li>
+<li>LIMA 논문 (Zhou et al.,  (<a href="https://huggingface.co/papers/2305.11206#:~:text=Face%20huggingface,learning%20or%20human%20preference%20modeling">Paper page - LIMA: Less Is More for Alignment - Hugging Face</a>)-L18】</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,1841 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LLM Fine-Tuning 기법을 배우는 워크샵">
+      
+      
+        <meta name="author" content="Jong Hyun Park">
+      
+      
+      
+        <link rel="prev" href="../../tuning_techniques/korean_tuning/">
+      
+      
+        <link rel="next" href="../llm_as_judge/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>벤치마크 및 평가 - LLM Fine-Tuning Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-header__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLM Fine-Tuning Course
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              벤치마크 및 평가
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-nav__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLM Fine-Tuning Course
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    홈
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    기본 개념
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            기본 개념
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_background/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM Background 지식
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fine_tuning_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-Tuning 기본
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/model_types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    모델 유형 및 특징
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_paradigm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    데이터 준비
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            데이터 준비
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/dataset_creation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터셋 준비
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/templates_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    템플릿과 포맷
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    튜닝 기법
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            튜닝 기법
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/continual_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPT (Continued Pre-Training)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/supervised_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/preference_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO (Direct Preference Optimization)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/peft_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEFT 방법론
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    양자화 기법
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/korean_tuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 확장 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    모델 평가
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            모델 평가
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-lmsys-chatbot-arena" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. LMSYS Chatbot Arena
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 벤치마크 테스트
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 벤치마크 테스트">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      자동 평가 도구
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="자동 평가 도구">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eleutherai-lm_eval" class="md-nav__link">
+    <span class="md-ellipsis">
+      EleutherAI의 lm_eval
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      한국어 LLM 평가 방법
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 벤치마크의 실효성에 대한 논의
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 벤치마크의 실효성에 대한 논의">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#open-ko-llm-leaderboard-logickor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Ko-LLM Leaderboard 와 LogicKor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      최근 발전 및 추가 벤치마크
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      참고문헌
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../llm_as_judge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../serving_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    서빙 및 최적화
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    활용 사례
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            활용 사례
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/alpaca/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpaca
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/deepseek/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/zephyr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Zephyr
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    실습 가이드
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            실습 가이드
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/gpt_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAI GPT 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_ipynb/1_openai_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT (Chat Model) 파인튜닝 하기!
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/open_weight_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    오픈 웨이트 파인튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/dpo_tutorial/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../practice_guides/reasoning_model/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    추론 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    연구 동향 및 프로젝트
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            연구 동향 및 프로젝트
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/latest_research/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    최신 연구 동향
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/license_data_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터 및 라이선스
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/competition_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    경쟁 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/domain_specific/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    도메인 특화 모델
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/jonhpark7966/courses_archive" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Other Courses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sudormrf.run/jong-hyun-park/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Author
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-lmsys-chatbot-arena" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. LMSYS Chatbot Arena
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 벤치마크 테스트
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. 벤치마크 테스트">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      자동 평가 도구
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="자동 평가 도구">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eleutherai-lm_eval" class="md-nav__link">
+    <span class="md-ellipsis">
+      EleutherAI의 lm_eval
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm" class="md-nav__link">
+    <span class="md-ellipsis">
+      한국어 LLM 평가 방법
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 벤치마크의 실효성에 대한 논의
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 벤치마크의 실효성에 대한 논의">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#open-ko-llm-leaderboard-logickor" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open Ko-LLM Leaderboard 와 LogicKor
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      최근 발전 및 추가 벤치마크
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      참고문헌
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="_1">벤치마크 및 평가 방법론<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>LLM을 잘 만들었는지 궁금하다면 평가를 해야겠죠.  </p>
+<p>가장 쉬운 방법은, </p>
+<ul>
+<li>사람들한테 두 가지 모델에서 나온 응답을 보여주고 뭐가 더 나은지 투표를 하게 하는 것입니다.</li>
+</ul>
+<p>사람이 투표를 하면 자동 평가가 안되는 것이 문제죠. 다음 방법은 </p>
+<ul>
+<li>그냥 퀴즈내고 잘 맞추는지 보는 것입니다.</li>
+</ul>
+<p>단답형이나 객관식 답변은 단순하게 채점이 가능한데요, 다음 문제는 서술형 평가죠. 요즘은 서술형 답변에 대한 평가도 LLM 에 맡깁니다.<br />
+이를 LLM as Judge 라고 부르는데요, 이건 따로 다음 문서에서 다루겠습니다. </p>
+<h2 id="1-lmsys-chatbot-arena">1. LMSYS Chatbot Arena<a class="headerlink" href="#1-lmsys-chatbot-arena" title="Permanent link">&para;</a></h2>
+<p><a href="https://lmarena.ai/?leaderboard">Chatbot Arena Leaderboard</a> 에 가시면 현 시점에 가장 많은 선택을 받은 모델들의 순위를 보실 수 있습니다. 
+이 글을 작성하고 있는 25.03.10 기준으로는 Grok3 가 1등, 1점차이로 GPT-4.5가 2등이네요.</p>
+<p>제가 개인적으로 어떤 모델이 현재 가장 좋을지 궁금할 때 항상 보는 곳입니다. </p>
+<div style="text-align: center;">
+  <img src="../../rscs/arena_leaderboard.png" alt="lmarena">
+  <p><em>LMSYS Chatbot Arena Leaderboard (25.03.10)</em></p>
+</div>
+
+<hr />
+<p>누구나 바로 테스트하고 투표 해보실 수 있습니다. 바로 한번 해봤습니다. 
+Model B 가 줏대가 있군요. 더 마음에 드는 모델을 투표하면 가려진 이름이 나옵니다. </p>
+<div style="text-align: center;">
+  <img src="../../rscs/arena_battle.png" alt="lmarena_battle">
+  <p><em>LMSYS Chatbot Arena Battle</em></p>
+</div>
+
+<p>Model A 는 claude sonnet 3.7 thinking 이었고, Model B 는 Gemini 2.0 flash lite 이었습니다. </p>
+<hr />
+<p>LMSYS Arena 가 전반적인 모델의 성능에 대해 가장 사람들이 신뢰하는 평가 방법인 것 같아요. 물론, 코딩 능력이나 분야에 따라서, 용도에 따라서 다 다를 수 있곘지만요.
+블라인드 페어와이즈 테스트, Elo 레이팅 시스템, 수많은 데이터 수집 등 신뢰할 만한 요소가 잘 갖춰진 것 같습니다.  </p>
+<p>문제는 시스템에 등록되어 사람들의 투표를 기다려야 하는데요, 이를 해결하기 위해 <a href="https://github.com/lmarena/arena-hard-auto">Arena Hard Auto</a> 라는 아레나 모사(?) 벤치도 있습니다. 벤치마크 평가는 이어서 보겠습니다. </p>
+<h2 id="2">2. 벤치마크 테스트<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>LLM 을 평가하기 위한 다양한 벤치마크가 있습니다.<br />
+제일 유명한 것은 아무래도 <a href="https://huggingface.co/datasets/cais/mmlu">MMLU (Massive Multitask Language Understanding)</a> 겠죠. 한 번쯤은 들어보셨을 텐데요. 57개 과목에 걸친 지식 테스트로, 대학 수준의 문제들을 포함합니다.  </p>
+<p>수 많은 문제 중 하나만 발췌해 왔습니다. </p>
+<table>
+<thead>
+<tr>
+<th>문제</th>
+<th>과목</th>
+<th>보기</th>
+<th>정답</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Which of these sets of logic gates are designated as universal gates?</td>
+<td>electrical_engineering</td>
+<td>A. NOR, NAND.<br>B. XOR, NOR, NAND.<br>C. OR, NOT, AND.<br>D. NOR, NAND, XNOR.</td>
+<td>A</td>
+</tr>
+</tbody>
+</table>
+<p>이 처럼 보기가 4개가 있는 객관식이라 평가하기가 아주 쉽습니다. </p>
+<p>또 다른 유명한 벤치들은 다음과 같습니다. </p>
+<ul>
+<li><strong>HumanEval/MBPP</strong>: 코딩 능력을 평가하는 벤치마크로, 함수 구현 문제를 제시하고 실행 가능한 코드를 생성하는지 확인합니다. HumanEval은 OpenAI가 개발한 164개의 프로그래밍 문제로 구성되며, MBPP(Mostly Basic Python Problems)는 974개의 기본 파이썬 프로그래밍 문제를 포함합니다.</li>
+<li><strong>GSM8K/MATH</strong>: 수학 문제 해결 능력을 평가하는 벤치마크입니다. GSM8K는 8,000개의 초중등 수준 수학 문제를, MATH는 대학 입시 수준의 12,500개 고난도 수학 문제를 포함합니다. 단계별 추론 능력을 측정하는 데 효과적입니다.</li>
+<li><strong>TruthfulQA</strong>: 모델이 사실에 기반한 정확한 정보를 제공하는지 평가합니다. 일반적인 오해, 미신, 잘못된 믿음에 관한 질문을 통해 모델의 사실성과 정직성을 테스트합니다.</li>
+<li><strong>ARC (AI2 Reasoning Challenge)</strong>: 초등학교 수준의 과학 문제를 통해 추론 능력을 평가합니다. 쉬운 세트와 어려운 세트로 나뉘며, 특히 어려운 세트는 단순 패턴 매칭으로 해결할 수 없는 문제들로 구성되어 있습니다.</li>
+<li><strong>MMLU-Pro</strong>: MMLU의 확장 버전으로, 더 어려운 전문 지식 문제를 포함합니다.</li>
+<li><strong>SWE-bench</strong>: 실제 GitHub 이슈를 기반으로 한 소프트웨어 엔지니어링 능력 평가 벤치마크입니다.</li>
+<li><strong>SimpleQA</strong>: 일반 지식을 테스트하는 질의응답 벤치마크로, 모델의 기본적인 사실 지식을 평가합니다.</li>
+</ul>
+<p>다양한 벤치들은 워낙 많기 때문에 이정도만 소개하고 넘어가겠습니다. </p>
+<h3 id="_2">자동 평가 도구<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<h4 id="eleutherai-lm_eval">EleutherAI의 <a href="https://github.com/EleutherAI/lm-evaluation-harness">lm_eval</a><a class="headerlink" href="#eleutherai-lm_eval" title="Permanent link">&para;</a></h4>
+<p>아래와 같이 CLI로 아주 쉽게 자동화된 평가가 가능합니다. </p>
+<div class="highlight"><pre><span></span><code>lm_eval<span class="w"> </span>--model<span class="w"> </span>hf<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--model_args<span class="w"> </span><span class="nv">pretrained</span><span class="o">=</span>EleutherAI/gpt-j-6B<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--tasks<span class="w"> </span>hellaswag<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--device<span class="w"> </span>cuda:0<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--batch_size<span class="w"> </span><span class="m">8</span>
+</code></pre></div>
+<ul>
+<li><strong>모듈식 태스크 플러그인</strong>: 다양한 벤치마크를 일관된 방식으로 평가할 수 있는 통합 프레임워크입니다.</li>
+<li><strong>다양한 평가 방식 지원</strong>: 제로샷, 원샷, 퓨샷 등 다양한 평가 방식을 지원합니다.</li>
+<li><strong>다양한 메트릭</strong>: 정확도, F1 점수, 퍼플렉시티 등 태스크에 적합한 메트릭을 제공합니다.</li>
+<li><strong>재현성</strong>: 동일한 모델과 태스크 설정으로 항상 같은 결과를 얻을 수 있도록 설계되었습니다.</li>
+</ul>
+<p>평가 방식에 대해선 자세한 설명이 많이 필요해서 따로 다루도록 하겠습니다.</p>
+<p><a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/README.md">lm_eval tasks</a> 를 보시면 지원하는 다양한 벤치마크들을 보실 수 있습니다. 아주 아주 아주 많이 있습니다.</p>
+<blockquote>
+<p>꼭 쓰세요!</p>
+</blockquote>
+<h2 id="llm">한국어 LLM 평가 방법<a class="headerlink" href="#llm" title="Permanent link">&para;</a></h2>
+<p>한국어를 위한 벤치마크도 당연히 꽤 있습니다. </p>
+<p>앞서 이야기한 <a href="https://github.com/EleutherAI/lm-evaluation-harness/blob/main/lm_eval/tasks/README.md">lm_eval tasks</a> 에도 한국어 벤치마크들이 있죠. </p>
+<p>최근 카카오에서 한국어를 타겟으로 발표한 모델 <a href="https://huggingface.co/kakaocorp/kanana-nano-2.1b-instruct">Kanana</a>의 평가 결과를 보겠습니다. </p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>MMLU</th>
+<th>KMMLU</th>
+<th>HAE-RAE</th>
+<th>HumanEval+</th>
+<th>MBPP+</th>
+<th>GSM8K</th>
+<th>MATH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kanana-Flag-32.5b</td>
+<td>81.08</td>
+<td><strong>64.19</strong></td>
+<td><strong>68.18</strong></td>
+<td>77.44</td>
+<td>69.84</td>
+<td>90.83</td>
+<td>57.82</td>
+</tr>
+<tr>
+<td>Qwen2.5-32b</td>
+<td>84.40</td>
+<td>59.37</td>
+<td>48.30</td>
+<td>82.32</td>
+<td>71.96</td>
+<td>95.30</td>
+<td>81.90</td>
+</tr>
+<tr>
+<td>Gemma-2-27b</td>
+<td>78.01</td>
+<td>49.98</td>
+<td>46.02</td>
+<td>70.12</td>
+<td>70.90</td>
+<td>91.05</td>
+<td>53.80</td>
+</tr>
+<tr>
+<td>EXAONE-3.5-32b</td>
+<td>78.30</td>
+<td>55.44</td>
+<td>52.27</td>
+<td>78.66</td>
+<td>70.90</td>
+<td>93.56</td>
+<td>76.80</td>
+</tr>
+<tr>
+<td>Aya-Expanse-32b</td>
+<td>74.49</td>
+<td>42.35</td>
+<td>51.14</td>
+<td>64.63</td>
+<td>65.61</td>
+<td>75.06</td>
+<td>42.82</td>
+</tr>
+</tbody>
+</table>
+<p>이 표에서 볼 수 있듯이, Kanana 가 가장 뛰어난 두 개의 벤치 KMMLU 와 HAE-RAE 가 한국어 기반 벤치마크 입니다.  </p>
+<p>제가 뽑은 벤치마크들은 다음과 같습니다. 한국어 사용자 분들이 가장 많이 사용하시던 것들을 기준으로 선정했습니다.<br />
+영어 벤치마크를 한국어 기반으로 적용시킨 벤치들이 가장 일반적이고, HAE-RAE 같은 경우는 "한국어" 라기보다 "한국" 문화 벤치 라고 보는 것이 좋겠습니다.  </p>
+<ul>
+<li><strong>KMMLU</strong>: 한국어로 재구성된 MMLU로, 45개 카테고리의 전문 지식을 평가</li>
+<li><strong>LogicKor</strong>: LMSYS의 MT-Bench를 한국어로 적응한 다중 턴 대화 벤치마크</li>
+<li><strong>Open Ko-LLM Leaderboard</strong>: 한국어 LLM을 위한 종합 랭킹 시스템</li>
+<li><strong>HAE-RAE Bench</strong>: 한국 문화 지식 QA 벤치마크</li>
+</ul>
+<h2 id="3">3. 벤치마크의 실효성에 대한 논의<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>벤치마크 성적이 좋은 것이 정말 좋은 모델일까요 ?? </p>
+</blockquote>
+<p>이 부분에 대해 많은 분들이 의문을 가집니다. 많이들 느끼셨을 거에요. 분명 벤치 숫자는 좋은데 왜 실 체감은 별로지...?<br />
+제 의견으로는 <strong>벤치에 overfit 되어 있어서</strong> 라고 생각합니다.   </p>
+<p>MMLU 와 같은 지식은 묻는 벤치는 당연히 세상의 모든 질문을 커버하지 못 합니다, 이미 문제 정답지가 공개된 이상 기출을 많이 풀어본다면 성능을 올릴 수 있겠죠.<br />
+수학이나 뭐 다른 벤치도 마찬가지에요. LLM 이 한번도 안 풀어본 벤치 문제로 테스트하면 성적표가 많이 달라집니다. </p>
+<h3 id="open-ko-llm-leaderboard-logickor">Open Ko-LLM Leaderboard 와 LogicKor<a class="headerlink" href="#open-ko-llm-leaderboard-logickor" title="Permanent link">&para;</a></h3>
+<p>위 의문을 잘 보여주는 사례가 있었습니다. </p>
+<ul>
+<li><a href="https://arca.live/b/alpaca/102052014">한국어 리더보드는 죽었다 (24.03)</a></li>
+</ul>
+<p>위 링크를 한번 읽어보시는 걸 추천드립니다.<br />
+요약하면, 실체감과 벤치 점수 (여기서는 Open Ko-LLM Leaderboard) 의 괴리가 크다는 점이고. 그래서 새로 벤치 (여기서는 LogicKor)를 만들어 돌렸더니 실체감과 비슷하더라는 사례입니다. 영어권에서도 당연히 비슷한 문제가 제기가 되고 있습니다.
+<a href="https://arxiv.org/abs/2309.08632">Pretraining on the Test Set Is All You Need</a> 페이퍼는 테스트 벤치를 직접 학습하는 것 (기출 문제를 풀어보고 시험 보는 것) 에 대한 비판입니다.   </p>
+<ul>
+<li><a href="https://github.com/instructkr/LogicKor">LogicKor 운영 중지</a></li>
+</ul>
+<p>새롭게 만들어진 벤치도 당연히 공개가 되고 나면 이를 학습하고 새로운 모델들에게 뚫리기 마련입니다. 비슷한 맥락으로 운영은 중지가 되었습니다. </p>
+<ul>
+<li><a href="https://github.com/Marker-Inc-Korea/Korean-SAT-LLM-Leaderboard/">2025 수능 언어영역 벤치</a></li>
+</ul>
+<p>비슷한 맥락으로 Marker AI 에서 만들어주신 24년 말 실시된 수능 언어영역에 대한 벤치와 그 결과입니다. 새로 나온 문제들은 아직 학습한 LLM 이 없기 떄문에 정당한 평가 요소로 사용될 수 있었습니다.   </p>
+<p>참고로 LogicKor 를 만드신 maywell 선생님은 고등학생 이시네요?! 대단하시군요 크흠...</p>
+<h2 id="_3">최근 발전 및 추가 벤치마크<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>최근에는 단순 지식과 능력을 넘어서 보다 다양한 평가요소들이 떠오르고 있습니다.<br />
+Reasoning 이나 AGI, 멀티모달리티, 이런 요소들을 다루고 있습니다.<br />
+GPT4.5는 EQ 를 강조하기도 했죠...</p>
+<ul>
+<li><strong>HELM (Holistic Evaluation of Language Models)</strong>: 정확성, 견고성, 공정성 등 다양한 차원에서 LLM을 평가</li>
+<li><strong>도메인별 벤치마크</strong>:</li>
+<li>코드 및 Reasoning: HumanEval-X, APPS, LeetCode 평가</li>
+<li>멀티모달: MME, VQAv2</li>
+<li>상호작용 에이전트: WebArena, MATH-GPT</li>
+<li>안전성 및 정렬: toxicity 평가, 탈옥 테스트</li>
+</ul>
+<h2 id="_4">참고문헌<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<ol>
+<li>LMSYS Org, "Chatbot Arena: Benchmarking LLMs in the Wild with Elo Ratings", 2023.</li>
+<li>LMSYS Org, "From Live Data to High-Quality Benchmarks: The Arena-Hard Pipeline", 2024.</li>
+<li>EleutherAI, "Language Model Evaluation Harness", 2023.</li>
+<li>Stanford CRFM, "Holistic Evaluation of Language Models (HELM)", 2023.</li>
+<li>Kim et al., "KMMLU: Korean Massive Multitask Language Understanding", 2023.</li>
+<li>Lee et al., "Open Ko-LLM Leaderboard: Evaluating Large Language Models in Korean with Ko-H5 Benchmark", 2024.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../../tuning_techniques/korean_tuning/" class="md-footer__link md-footer__link--prev" aria-label="이전: 한국어 확장 튜닝">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                한국어 확장 튜닝
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../llm_as_judge/" class="md-footer__link md-footer__link--next" aria-label="다음: LLM as Judge">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                LLM as Judge
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

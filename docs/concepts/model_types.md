@@ -1,5 +1,61 @@
 # LLM 모델 유형 및 특징
 
+## LLM Status 에 따른 분류
+
+### Base Model vs Instruct Model
+
+많은 오픈 웨이트 모델들은 Base Model 과 Instruct Model 두 가지 버전으로 제공됩니다. 물론 Instruct Model 만 공개하는 경우도 많습니다.  
+아래 그림은 25년 3월 공개된 Gemma3 시리즈의 HuggingFace 페이지 입나다.  
+pt (pretrained, base model 임) 버전과 it (instruct, 파인튜닝된 모델 임) 버전이 있습니다.  
+
+<div style="text-align: center;">
+  <img src="../../rscs/gemma3.png" alt="gemma3_hf">
+  <p><em>Gemma3 시리즈의 HuggingFace 페이지</em></p>
+</div>
+
+현시점 기준으로 많은 한국어 모델들 (Exaone, Kanana, ...) 등은 Base Model 을 공개하지 않고 있어서 아쉽습니다.  
+
+
+### Base Model
+- Base Model 은 pretrained 만 완료된 모델입니다. 그래서 사람처럼 대화하지 못 합니다. 학습단계에서 단순히 수많은 글을 읽었기 떄문에, 어떠한 input도 글의 일부라고 생각합니다.
+- 아래와 같이 위키 스타일의 글을 일부 인풋으로 주면 자연스럽게 이어서 작성합니다. 
+
+<div style="text-align: center;">
+  <img src="../../rscs/basemodel_1.png" alt="base_model">
+  <p><em>Base Model 의 예시 - 희망편</em></p>
+</div>
+
+- 반면, 아래와 같이 대화형식으로 질문하면 완전히 망가지는 모습을 보입니다. 
+
+<div style="text-align: center;">
+  <img src="../../rscs/basemodel_2.png" alt="base_model">
+  <p><em>Base Model 의 예시 - 절망편</em></p>
+</div>
+
+- 그렇다면, Base Model은 어디에 써야할까요? 사실상 바로 사용하기는 어렵습니다. 대부분 파인튜닝의 재료로 활용됩니다. 알아서 튜닝해서 가져다 쓰라는 용도라고 볼 수 있습니다.  
+
+### Instruct Model
+- 대화 형식으로 튜닝된 모델입니다. 현재 우리가 보통 사용하는 ChatGPT 와 같은 형태는 모두 Instrcut 튜닝이 완료된 모델들 입니다. 
+- 위 Base 모델에서 망가졌던 질문을 똑같이 한번 해보겠습니다.
+ 
+<div style="text-align: center;">
+  <img src="../../rscs/instructmodel.png" alt="instruct_model">
+  <p><em>Instruct Model 의 예시</em></p>
+</div>
+
+- 대화 형식으로 아주 잘 대답하는 것을 확인 할 수 있습니다. 
+- Instruct Model은 대화 형식의 대답 뿐만 아니라, tool use 와 같은 다양한 기능들이 추가되는 것이 일반적입니다.
+- 사람으로 비유하자면, 메뉴얼을 다 학습해서 일할 준비가 된 경력직이라고 보면 되겠습니다, 회사들이 메뉴얼을 각각 다르게 만들테니, 모델마다 지원하는 일의 범위가 다를 수 있습니다. 
+- Llama 3.1 의 예시를 보면, Instruct 모델이 어떤 기능을 추가로 지원하는지 알 수 있습니다. (자세한 내용은 [Herd of Models](https://arxiv.org/pdf/2407.21783) 페이퍼를 보시면 되겠습니다.)
+
+<div style="text-align: center;">
+  <img src="../../rscs/instructModel_herdofmodels.png" alt="instruct_model_llama3.1">
+  <p><em>Llama 3.1 의 Base Model 과 Instruct Model 의 차이</em></p>
+</div>
+
+
+ 
+
 ## LLM 용도별 분류
 
 ### 대형 언어 모델 (LLM)

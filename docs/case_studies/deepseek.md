@@ -127,3 +127,9 @@ DeepSeek은 중국 스타트업이 개발한 **오픈 웨이트** LLM 시리즈�
 - DeepSeek-V3 Technical Report (https://arxiv.org/html/2412.19437v1)
 - HuggingFace DeepSeek-V3 모델 카드 (https://huggingface.co/deepseek-ai/DeepSeek-V3)
 - Open-R1: a fully open reproduction of DeepSeek-R1 (https://huggingface.co/blog/open-r1) 
+
+
+
+[참고, 작성 중]
+- https://x.com/markchen90/status/1884303237186216272
+- https://www.youtube.com/watch?v=Z-ELkZ_azYM

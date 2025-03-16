@@ -28,7 +28,8 @@ nav:
     - DeepSeek: case_studies/deepseek.md
     - Zephyr: case_studies/zephyr.md
   - 실습 가이드:
-    - GPT 파인튜닝: practice_guides/gpt_finetuning.md
+    - OpenAI GPT 파인튜닝: practice_guides/gpt_finetuning.md
+    - GPT-4o-mini 파인튜닝 실습: practice_ipynb/1_openai_finetuning.ipynb
     - 오픈 웨이트 파인튜닝: practice_guides/open_weight_finetuning.md
     - DPO 튜닝: practice_guides/dpo_tutorial.md
     - 추론 모델 개발: practice_guides/reasoning_model.md
@@ -91,3 +92,4 @@ extra_javascript:
 
 plugins:
   - search
+  - mkdocs-jupyter

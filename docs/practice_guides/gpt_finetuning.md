@@ -236,9 +236,49 @@ completion = client.chat.completions.create(
 
 ### 비전 파인튜닝
 
+2024.10.1 [비전 파인튜닝](https://openai.com/index/introducing-vision-to-the-fine-tuning-api/) 이 출시되었습니다.  
+
+여러 성공 사례가 나와있습니다만, Grab 에서 활용한 예시 하나만 보겠습니다. 
+
+<div style="text-align: center;">
+  <img src="../../rscs/openai_vision_finetuning_trafficsign.webp" alt="Finetune Results">
+</div>
+
+나라별 표지판 싸인이 다르기 떄문에, 성능 개선을 위해 Grab 에서 사용했다고 합니다.  
+놀라운 점은...
+
+> 100 장의 예시만으로 로컬라이징을 성공했다고 합니다!
+
+100장이라는 규모는 vision task 특성상 CNN 기반의 모델에서도 보기 드문 아주 작은 규모입니다.  
+반대로 이야기하면, 멀티모달 LLM 이 범용성이 아주 뛰아나기 떄문에 더 적은 데이터로도 충분히 성능 향상을 이끌어 낼 수 있다는 것을 보여주는 좋은 예시입니다.  
+
+---
+
 JSONL 파일에 이미지를 포함하여 파인튜닝도 가능합니다. Chat Completions에 하나 이상의 이미지 입력을 보낼 수 있는 것처럼, 학습 데이터 내에 동일한 메시지 유형을 포함할 수 있습니다. 이미지는 HTTP URL 또는 base64로 인코딩된 이미지를 포함하는 데이터 URL로 제공할 수 있습니다.
 
-이미지 데이터셋 요구사항:
+
+```json
+{
+  "messages": [
+    { "role": "system", "content": "You are an assistant that identifies uncommon cheeses." },
+    { "role": "user", "content": "What is this cheese?" },
+    { "role": "user", "content": [
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://upload.wikimedia.org/wikipedia/commons/3/36/Danbo_Cheese.jpg"
+          }
+        }
+      ] 
+    },
+    { "role": "assistant", "content": "Danbo" }
+  ]
+}
+```
+
+
+이미지 데이터셋 요구사항:  
+
 - 크기: 최대 50,000개의 이미지 포함 예제, 예제당 최대 10개 이미지, 이미지당 최대 10MB
 - 형식: JPEG, PNG 또는 WEBP 형식, RGB 또는 RGBA 이미지 모드
 - 콘텐츠 제한: 사람, 얼굴, 어린이, CAPTCHA가 포함된 이미지는 데이터셋에서 제외됩니다

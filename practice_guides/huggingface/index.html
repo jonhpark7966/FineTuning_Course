@@ -1,0 +1,2663 @@
+
+<!doctype html>
+<html lang="ko" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="LLM Fine-Tuning 기법을 배우는 워크샵">
+      
+      
+        <meta name="author" content="Jong Hyun Park">
+      
+      
+      
+        <link rel="prev" href="../1_openai_finetuning/">
+      
+      
+        <link rel="next" href="../2_huggingface_style_finetuning/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.0, mkdocs-material-9.5.28">
+    
+    
+      
+        <title>Hugging Face 플랫폼 & 라이브러리 - LLM Fine-Tuning Course</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.6543a935.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hugging-face" class="md-skip">
+          콘텐츠로 이동
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="상단/헤더">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-header__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLM Fine-Tuning Course
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Hugging Face 플랫폼 & 라이브러리
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="라이트 모드로 전환"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="라이트 모드로 전환" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="amber" data-md-color-accent="amber"  aria-label="다크 모드로 전환"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="다크 모드로 전환" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="검색" placeholder="검색" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="검색">
+        
+        <button type="reset" class="md-search__icon md-icon" title="지우기" aria-label="지우기" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            검색 초기화
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="네비게이션" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="LLM Fine-Tuning Course" class="md-nav__button md-logo" aria-label="LLM Fine-Tuning Course" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLM Fine-Tuning Course
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    홈
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    기본 개념
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            기본 개념
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_background/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM Background 지식
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/fine_tuning_basics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Fine-Tuning 기본
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/model_types/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    모델 유형 및 특징
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../concepts/llm_paradigm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM 패러다임
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    데이터 준비
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            데이터 준비
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/dataset_creation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터셋 준비
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../data_preparation/templates_formats/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    템플릿과 포맷
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    튜닝 기법
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            튜닝 기법
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/continual_pretraining/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CPT (Continued Pre-Training)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/supervised_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SFT (Supervised Fine-Tuning)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/preference_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DPO (Direct Preference Optimization)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/peft_methods/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    PEFT 방법론
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/quantization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    양자화 기법
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tuning_techniques/korean_tuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 확장 튜닝
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    모델 평가
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            모델 평가
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/benchmarks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    벤치마크 및 평가
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/llm_as_judge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../evaluation/serving_optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    서빙 및 최적화
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    활용 사례
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            활용 사례
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/alpaca/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Alpaca
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/deepseek/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../case_studies/zephyr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Zephyr
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    OpenAI GPT 파인튜닝 실습
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            OpenAI GPT 파인튜닝 실습
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpt_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    OpenAI 파인튜닝 서비스 개요
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gpt_finetuning_gui/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT-4o-mini 파인튜닝 실습 (GUI)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1_openai_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    GPT-4o-mini 파인튜닝 실습 (ipynb)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Open Weight 모델 파인튜닝 실습
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            Open Weight 모델 파인튜닝 실습
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Hugging Face 플랫폼 & 라이브러리
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Hugging Face 플랫폼 & 라이브러리
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face 플랫폼 개요
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face 플랫폼 개요">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      모델 및 데이터셋 저장소
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face 라이브러리 및 도구
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face 라이브러리 및 도구">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      핵심 라이브러리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformers 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-automodel-autotokenizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AutoModel과 AutoTokenizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 토크나이저
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 파이프라인
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. 텍스트 생성 예제
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#huggingface-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      HuggingFace Hub 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HuggingFace Hub 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 인증
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 파일 다운로드
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 파일 업로드 및 저장소 관리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-git-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Git과 Repository 클래스 활용
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. 모델 카드 및 메타데이터 관리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-trainer" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Trainer와의 통합
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Datasets 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Datasets 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 데이터셋 로드
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Dataset 객체 구조
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 데이터셋 처리
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 데이터셋 처리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map" class="md-nav__link">
+    <span class="md-ellipsis">
+      map 함수로 데이터 변환
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      필터링과 정렬
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. 메모리 관리 및 스트리밍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Transformers와 통합
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Hub와 데이터셋 공유
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. 대규모 데이터셋 작업 팁
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-spaces-gradio-streamlit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face Spaces (Gradio / Streamlit 앱 호스팅)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face Spaces (Gradio / Streamlit 앱 호스팅)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Space 생성 및 공유
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 개발 도구
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 하드웨어 및 스케일링
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Spaces 활용 사례
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2_huggingface_style_finetuning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    오픈 모델을 이용한 Fine Tuning &amp; LoRA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3_korean_fine_tuning_cpt_instruct/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    한국어 파인 튜닝 하기
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5_DPO/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Direct Preference Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6_1_Reasoning_distillation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    DeepSeek-R1 distillation 으로 Reasoning 모델 만들기
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    평가 실습
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            평가 실습
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_1_eval_mmlu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Benchmark 평가 (MMLU)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4_2_eval_langsmith_llmasjudge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLM as Judge 평가
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    연구 동향 및 프로젝트
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            연구 동향 및 프로젝트
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/latest_research/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    최신 연구 동향
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/license_data_issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    데이터 및 라이선스
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/competition_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    경쟁 모델 개발
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../trends_projects/domain_specific/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    도메인 특화 모델
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    About
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            About
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/jonhpark7966/courses_archive" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Other Courses
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://sudormrf.run/jong-hyun-park/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Author
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="목차">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      목차
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face 플랫폼 개요
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face 플랫폼 개요">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      모델 및 데이터셋 저장소
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hugging-face_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face 라이브러리 및 도구
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face 라이브러리 및 도구">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      핵심 라이브러리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformers 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformers 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-automodel-autotokenizer" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AutoModel과 AutoTokenizer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 토크나이저
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 파이프라인
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. 텍스트 생성 예제
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#huggingface-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      HuggingFace Hub 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="HuggingFace Hub 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 인증
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 파일 다운로드
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 파일 업로드 및 저장소 관리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-git-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Git과 Repository 클래스 활용
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. 모델 카드 및 메타데이터 관리
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-trainer" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Trainer와의 통합
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#datasets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Datasets 라이브러리 상세
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Datasets 라이브러리 상세">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 데이터셋 로드
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-dataset" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Dataset 객체 구조
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 데이터셋 처리
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. 데이터셋 처리">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#map" class="md-nav__link">
+    <span class="md-ellipsis">
+      map 함수로 데이터 변환
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      필터링과 정렬
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. 메모리 관리 및 스트리밍
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-transformers" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Transformers와 통합
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Hub와 데이터셋 공유
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. 대규모 데이터셋 작업 팁
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hugging-face-spaces-gradio-streamlit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hugging Face Spaces (Gradio / Streamlit 앱 호스팅)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hugging Face Spaces (Gradio / Streamlit 앱 호스팅)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Space 생성 및 공유
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 개발 도구
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 하드웨어 및 스케일링
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-spaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Spaces 활용 사례
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="hugging-face">Hugging Face 소개 및 활용 가이드<a class="headerlink" href="#hugging-face" title="Permanent link">&para;</a></h1>
+<p>Hugging Face는 머신러닝 모델, 데이터셋, 애플리케이션을 공유하고 배포하기 위한 플랫폼으로, LLM 이후 표준으로 자리 잡았습니다. 이 문서에서는 Hugging Face 생태계의 주요 구성 요소와 이를 실무에서 활용하는 방법을 다룹니다.</p>
+<table>
+<thead>
+<tr>
+<th>💡 필자의 의견</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>허깅페이스가 사실상 AI 쪽에서는 github과 같은 위상이죠. 중국 쪽에는 ModelScope 이라는 대체제(?) 가 있긴 합니다, 딥러닝 시대를 보면, tfhub 이나 kaggle 도 있었지만, Transformer 를 기반으로한 모델들이 천하통일을 하고 그 모델들에 많이 사용되는 허깅페이스 라이브러리 덕분인지, 허깅페이스가 사실상 표준이 되었습니다.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="hugging-face_1">Hugging Face 플랫폼 개요<a class="headerlink" href="#hugging-face_1" title="Permanent link">&para;</a></h2>
+<h3 id="_1">모델 및 데이터셋 저장소<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>Hugging Face Models Hub은 1,000,000개 이상의 모델과 200,000개 이상의 데이터셋을 호스팅합니다. 각 모델이나 데이터셋은 플랫폼 내 Git 저장소에 있어 버전 관리, 커밋 기록, 이슈/토론 등의 기능을 제공합니다.</p>
+<ul>
+<li>모델 업로드: 웹 UI나 Git, huggingface_hub Python 라이브러리를 통해 모델을 추가할 수 있습니다. 예를 들어, Transformers로 모델을 파인튜닝한 후 model.push_to_hub("username/my-model")을 실행하면 가중치가 저장소에 커밋됩니다. 모델은 공개 또는 비공개로 설정 가능합니다.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForSequenceClassification</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+
+<span class="c1"># 모델과 토크나이저 로드 (또는 자체 학습한 모델 사용)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;llama...&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;llama...&quot;</span><span class="p">)</span>
+
+<span class="c1"># Hub에 모델 업로드 (로그인 필요)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="s2">&quot;username/my_llama...&quot;</span><span class="p">)</span>
+<span class="n">tokenizer</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="s2">&quot;username/my_llama&quot;</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>데이터셋 업로드 : 데이터셋도 유사하게 데이터 저장소로 저장됩니다. 새 데이터셋 저장소를 만들고 파일(CSV, JSONL, 이미지 등)을 업로드할 수 있습니다. 웹 인터페이스에서는 드래그 앤 드롭 업로드를 지원하며, 각 데이터셋 저장소에는 🤗 Datasets 라이브러리에서 직접 사용할 수 있는 데이터셋 스크립트나 메타데이터를 포함할 수 있습니다. </li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># 데이터셋을 Hugging Face Hub에 업로드하는 예시</span>
+<span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">Dataset</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># 로컬 CSV 파일에서 데이터셋 생성</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;my_data.csv&quot;</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_pandas</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="c1"># Hub에 데이터셋 업로드</span>
+<span class="n">dataset</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="s2">&quot;username/my-dataset&quot;</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li>모델 / 데이터셋 사용 : 위의 업로드와 마찬가지로 다운받아 사용하는 것도 당연히 가능합니다. 다음 실습 문서에서 이어서 직접 해보겠습니다. </li>
+</ul>
+<h2 id="hugging-face_2">Hugging Face 라이브러리 및 도구<a class="headerlink" href="#hugging-face_2" title="Permanent link">&para;</a></h2>
+<h3 id="_2">핵심 라이브러리<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>🤗 Transformers</strong>: 모델 아키텍처(수천 개의 사전 훈련된 모델 포함), 토크나이저 및 파이프라인을 위한 핵심 라이브러리</li>
+<li><strong>🤗 Datasets</strong>: 데이터셋을 쉽게 로드하고 전처리하기 위한 라이브러리(Hub 통합 및 효율적인 디스크 관리 포함)</li>
+<li><strong>🤗 Hugging Face Hub (Python)</strong>: 모델 및 데이터를 다운로드/업로드하고 Hub와 상호 작용하기 위한 유틸리티</li>
+<li><strong>🤗 Trainer API</strong>: Transformers 내 포함된, 로깅/평가 등을 지원하는 고수준 트레이너 클래스</li>
+<li><strong>🤗 Accelerate</strong>: 코드 변경 없이 분산 훈련 및 혼합 정밀도를 지원하는 라이브러리</li>
+</ul>
+<h3 id="transformers">Transformers 라이브러리 상세<a class="headerlink" href="#transformers" title="Permanent link">&para;</a></h3>
+<p>Transformers 라이브러리는 Hugging Face의 핵심 라이브러리로, 다양한 모델 아키텍처(BERT, GPT, LLaMA, Mistral 등)를 구현하고, 사전 훈련된 가중치를 로드하여 추론이나 미세 조정에 사용할 수 있게 해줍니다. NLP 작업뿐만 아니라 이미지, 오디오 작업에도 널리 사용됩니다.</p>
+<h4 id="1-automodel-autotokenizer">1. AutoModel과 AutoTokenizer<a class="headerlink" href="#1-automodel-autotokenizer" title="Permanent link">&para;</a></h4>
+<p>이 "auto" 클래스들은 모델 이름이나 경로를 기반으로 어떤 아키텍처든 로드할 수 있습니다. 예를 들어, <code>AutoModel.from_pretrained("mistralai/Mistral-7B-v0.1")</code>를 호출하면:</p>
+<ul>
+<li>Hub에서 모델 구성을 다운로드합니다(모델 유형 = Mistral).</li>
+<li>해당 구성으로 내부적으로 MistralModel 클래스를 인스턴스화합니다.</li>
+<li>가중치를 다운로드하고 모델 인스턴스에 로드합니다.</li>
+</ul>
+<p>다양한 작업에 맞는 AutoModel 변형이 있습니다:
+- <code>AutoModel</code>: 기본 모델만 제공
+- <code>AutoModelForCausalLM</code>: GPT나 LLaMA 같은 언어 모델용</p>
+<p>마찬가지로, <code>AutoTokenizer.from_pretrained(name)</code>는 모델 구성에 따라 적절한 토크나이저(LlamaTokenizer 등)를 로드합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+
+<span class="c1"># 모델과 토크나이저 로드</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;qwen/qwen2.5-3b-instruct&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;qwen/qwen2.5-3b-instruct&quot;</span><span class="p">)</span>
+
+<span class="c1"># 텍스트 처리 및 추론</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hugging Face는 정말 놀라운 도구를 제공합니다!&quot;</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
+<span class="n">logits</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">logits</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">logits</span><span class="p">)</span>  <span class="c1"># 클래스에 대한 원시 점수</span>
+</code></pre></div>
+<h4 id="2">2. 토크나이저<a class="headerlink" href="#2" title="Permanent link">&para;</a></h4>
+<p><code>AutoTokenizer</code>(또는 <code>LlamaTokenizer</code>와 같은 특정 토크나이저)는 전처리를 담당합니다:
+- 텍스트를 토큰 ID로 변환
+- 특수 토큰 추가([CLS], [SEP], [BOS], [EOS] 등)
+- 패딩/자르기 처리
+- 텍스트로 다시 변환(디코딩)</p>
+<p>각 모델 유형마다 다른 토크나이징 방식을 사용합니다:
+- GPT-2: 바이트 페어 인코딩(BPE)
+- LLaMA/Mistral: SentencePiece 모델
+- BERT: WordPiece</p>
+<p>토크나이저는 Hub의 모델과 함께 저장되므로, <code>from_pretrained</code>를 사용하면 모델 훈련에 사용된 것과 동일한 어휘와 전처리를 사용할 수 있습니다.</p>
+<h4 id="3">3. 파이프라인<a class="headerlink" href="#3" title="Permanent link">&para;</a></h4>
+<p>Transformers는 일반적인 작업을 위한 고수준 파이프라인 API도 제공합니다. 예를 들어, 감성 분석 파이프라인은 원시 텍스트를 받아 점수와 함께 "긍정" 또는 "부정"을 출력합니다. 파이프라인은 내부적으로 토큰화, 모델 순전파, 디코딩을 한 번의 호출로 처리합니다.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">pipeline</span>
+
+<span class="c1"># 감성 분석 파이프라인 생성</span>
+<span class="n">classifier</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;sentiment-analysis&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">classifier</span><span class="p">(</span><span class="s2">&quot;Hugging Face 라이브러리를 사용하는 것이 정말 좋아요!&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="c1"># {&#39;label&#39;: &#39;POSITIVE&#39;, &#39;score&#39;: 0.9998}</span>
+
+<span class="c1"># 텍스트 생성 파이프라인</span>
+<span class="n">generator</span> <span class="o">=</span> <span class="n">pipeline</span><span class="p">(</span><span class="s2">&quot;text-generation&quot;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s2">&quot;meta-llama/Llama-2-7b-hf&quot;</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">generator</span><span class="p">(</span><span class="s2">&quot;인공지능의 미래는&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;generated_text&#39;</span><span class="p">])</span>
+</code></pre></div>
+<h4 id="4">4. 텍스트 생성 예제<a class="headerlink" href="#4" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoModelForCausalLM</span><span class="p">,</span> <span class="n">AutoTokenizer</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="c1"># 모델과 토크나이저 로드</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;mistralai/Mistral-7B-Instruct-v0.2&quot;</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;mistralai/Mistral-7B-Instruct-v0.2&quot;</span><span class="p">,</span> 
+                                            <span class="n">torch_dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>  <span class="c1"># 메모리 절약을 위한 반정밀도</span>
+                                            <span class="n">device_map</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>  <span class="c1"># 자동 장치 매핑</span>
+<span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>  <span class="c1"># 추론 모드로 설정</span>
+
+<span class="c1"># 프롬프트 준비</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="s2">&quot;&lt;s&gt;[INST] 인공지능의 미래에 대해 간략히 설명해주세요. [/INST]&quot;</span>
+<span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+
+<span class="c1"># 텍스트 생성</span>
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+    <span class="o">**</span><span class="n">inputs</span><span class="p">,</span> 
+    <span class="n">max_new_tokens</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>  <span class="c1"># 생성할 최대 토큰 수</span>
+    <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>      <span class="c1"># 샘플링 사용</span>
+    <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>     <span class="c1"># 온도 설정 (낮을수록 더 결정적)</span>
+    <span class="n">top_p</span><span class="o">=</span><span class="mf">0.9</span>            <span class="c1"># 누적 확률이 0.9가 될 때까지의 토큰만 고려</span>
+<span class="p">)</span>
+
+<span class="c1"># 결과 디코딩 및 출력</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</code></pre></div>
+<p>이 예제는 Mistral-7B-Instruct 모델을 로드하고 <code>.generate()</code> 메서드를 사용하여 자동 회귀 텍스트 생성을 처리합니다. 출력은 프롬프트에 대한 응답일 것입니다. <code>.generate</code> 메서드에는 디코딩(그리디, 빔 서치, 샘플링 등)을 위한 다양한 매개변수가 있습니다.</p>
+<h3 id="huggingface-hub">HuggingFace Hub 라이브러리 상세<a class="headerlink" href="#huggingface-hub" title="Permanent link">&para;</a></h3>
+<p>Hugging Face Hub 라이브러리(<code>huggingface_hub</code>)는 Hugging Face 저장소와 상호작용하기 위한 파이썬 인터페이스를 제공하는 low-level 도구입니다. Transformers 라이브러리가 내부적으로 사용하지만, 독립적으로도 사용할 수 있으며 모든 유형의 파일을 관리할 수 있습니다.</p>
+<h4 id="1">1. 인증<a class="headerlink" href="#1" title="Permanent link">&para;</a></h4>
+<p>Hub와 상호작용하기 위해서는 사용자 인증이 필요합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 명령줄에서 로그인 (토큰을 로컬에 저장)</span>
+<span class="err">!</span><span class="n">huggingface</span><span class="o">-</span><span class="n">cli</span> <span class="n">login</span>
+
+<span class="c1"># 또는 파이썬 코드에서 로그인</span>
+<span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">login</span>
+<span class="n">login</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;hf_...&quot;</span><span class="p">)</span>  <span class="c1"># 개인 액세스 토큰</span>
+</code></pre></div>
+<p>토큰은 <a href="https://huggingface.co/settings/tokens">Hugging Face 설정</a>에서 생성할 수 있습니다.</p>
+<h4 id="2_1">2. 파일 다운로드<a class="headerlink" href="#2_1" title="Permanent link">&para;</a></h4>
+<p>특정 모델의 파일만 다운로드할 때 유용합니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">hf_hub_download</span>
+
+<span class="c1"># 특정 파일만 다운로드</span>
+<span class="n">config_file</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;google/mt5-base&quot;</span><span class="p">,</span> 
+    <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;config.json&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="3_1">3. 파일 업로드 및 저장소 관리<a class="headerlink" href="#3_1" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">HfApi</span><span class="p">,</span> <span class="n">upload_file</span>
+
+<span class="c1"># API 인스턴스 생성</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">HfApi</span><span class="p">()</span>
+
+<span class="c1"># 새 저장소 생성</span>
+<span class="n">api</span><span class="o">.</span><span class="n">create_repo</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;username/my-new-model&quot;</span><span class="p">,</span> <span class="n">private</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 단일 파일 업로드</span>
+<span class="n">upload_file</span><span class="p">(</span>
+    <span class="n">path_or_fileobj</span><span class="o">=</span><span class="s2">&quot;./model.pt&quot;</span><span class="p">,</span>  <span class="c1"># 로컬 파일 경로</span>
+    <span class="n">path_in_repo</span><span class="o">=</span><span class="s2">&quot;model.pt&quot;</span><span class="p">,</span>       <span class="c1"># 저장소 내 경로</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;username/my-new-model&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># 폴더 전체 업로드</span>
+<span class="n">api</span><span class="o">.</span><span class="n">upload_folder</span><span class="p">(</span>
+    <span class="n">folder_path</span><span class="o">=</span><span class="s2">&quot;./model_files&quot;</span><span class="p">,</span>
+    <span class="n">repo_id</span><span class="o">=</span><span class="s2">&quot;username/my-new-model&quot;</span><span class="p">,</span>
+    <span class="n">repo_type</span><span class="o">=</span><span class="s2">&quot;model&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="4-git-repository">4. Git과 Repository 클래스 활용<a class="headerlink" href="#4-git-repository" title="Permanent link">&para;</a></h4>
+<p>Hub 저장소는 Git 저장소이므로 Git 명령어로 직접 작업할 수도 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">Repository</span>
+
+<span class="c1"># 저장소 로컬에 클론</span>
+<span class="n">repo</span> <span class="o">=</span> <span class="n">Repository</span><span class="p">(</span>
+    <span class="n">local_dir</span><span class="o">=</span><span class="s2">&quot;./my-model-dir&quot;</span><span class="p">,</span> 
+    <span class="n">clone_from</span><span class="o">=</span><span class="s2">&quot;username/my-model&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># 파일 추가/수정 후 커밋 및 푸시</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;./my-model-dir/README.md&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# 내 모델에 대한 설명</span><span class="se">\n\n</span><span class="s2">이 모델은...&quot;</span><span class="p">)</span>
+
+<span class="n">repo</span><span class="o">.</span><span class="n">git_add</span><span class="p">(</span><span class="s2">&quot;README.md&quot;</span><span class="p">)</span>
+<span class="n">repo</span><span class="o">.</span><span class="n">git_commit</span><span class="p">(</span><span class="s2">&quot;README 업데이트&quot;</span><span class="p">)</span>
+<span class="n">repo</span><span class="o">.</span><span class="n">git_push</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="5">5. 모델 카드 및 메타데이터 관리<a class="headerlink" href="#5" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">ModelCard</span><span class="p">,</span> <span class="n">CardData</span>
+
+<span class="c1"># 모델 카드 생성 또는 업데이트</span>
+<span class="n">card_data</span> <span class="o">=</span> <span class="n">CardData</span><span class="p">(</span>
+    <span class="n">language</span><span class="o">=</span><span class="s2">&quot;ko&quot;</span><span class="p">,</span>
+    <span class="n">license</span><span class="o">=</span><span class="s2">&quot;mit&quot;</span><span class="p">,</span>
+    <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;text-classification&quot;</span><span class="p">,</span> <span class="s2">&quot;korean&quot;</span><span class="p">],</span>
+    <span class="n">datasets</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;klue&quot;</span><span class="p">],</span>
+    <span class="n">metrics</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mf">0.92</span><span class="p">}]</span>
+<span class="p">)</span>
+
+<span class="n">card</span> <span class="o">=</span> <span class="n">ModelCard</span><span class="o">.</span><span class="n">from_template</span><span class="p">(</span>
+    <span class="n">card_data</span><span class="o">=</span><span class="n">card_data</span><span class="p">,</span>
+    <span class="n">template_path</span><span class="o">=</span><span class="s2">&quot;modelcard_template.md&quot;</span>  <span class="c1"># 옵션: 커스텀 템플릿</span>
+<span class="p">)</span>
+
+<span class="n">card</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="s2">&quot;username/my-model&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h4 id="6-trainer">6. Trainer와의 통합<a class="headerlink" href="#6-trainer" title="Permanent link">&para;</a></h4>
+<p>Transformers <code>Trainer</code>를 사용한다면, 훈련이 끝난 후 한 줄로 모델과 메타데이터를 저장소에 업로드할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 훈련 후 저장소에 업로드</span>
+<span class="n">trainer</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">()</span>
+</code></pre></div>
+<p>이 명령은 모델과 토크나이저를 저장하고, 학습 로그와 하이퍼파라미터를 포함한 모델 카드를 자동으로 생성하여 업로드합니다.</p>
+<h3 id="datasets">Datasets 라이브러리 상세<a class="headerlink" href="#datasets" title="Permanent link">&para;</a></h3>
+<p>🤗 Datasets 라이브러리는 데이터을 효율적으로 로드, 처리, 공유하기 위한 도구입니다. 대규모 데이터셋을 메모리에 맞게 스트리밍하거나 메모리 매핑하는 기능을 제공하며, Hugging Face Hub와 통합되어 수많은 공개 데이터셋에 쉽게 접근할 수 있습니다.</p>
+<h4 id="1_1">1. 데이터셋 로드<a class="headerlink" href="#1_1" title="Permanent link">&para;</a></h4>
+<p><code>load_dataset</code> 함수를 사용하여 다양한 소스에서 데이터셋을 로드할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datasets</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="c1"># Hub에서 공개 데이터셋 로드</span>
+<span class="n">squad_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;squad&quot;</span><span class="p">)</span>  <span class="c1"># SQuAD 질의응답 데이터셋</span>
+
+<span class="c1"># 특정 사용자의 데이터셋 로드</span>
+<span class="n">custom_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;username/my_dataset&quot;</span><span class="p">)</span>
+
+<span class="c1"># 로컬 파일에서 로드</span>
+<span class="n">csv_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="s2">&quot;my_data.csv&quot;</span><span class="p">)</span>
+<span class="n">json_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="s2">&quot;data.jsonl&quot;</span><span class="p">)</span>
+
+<span class="c1"># 여러 파일 또는 분할 지정</span>
+<span class="n">multi_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">,</span> <span class="n">data_files</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;train&quot;</span><span class="p">:</span> <span class="s2">&quot;train_data.csv&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;validation&quot;</span><span class="p">:</span> <span class="s2">&quot;val_data.csv&quot;</span>
+<span class="p">})</span>
+</code></pre></div>
+<p>Datasets는 CSV, JSON, Parquet, Text, Image 등 다양한 파일 형식을 지원합니다. 지원되지 않는 형식의 경우, 커스텀 로더 스크립트를 작성하거나 파이썬에서 직접 데이터를 로드하여 Dataset 객체를 만들 수 있습니다.</p>
+<h4 id="2-dataset">2. Dataset 객체 구조<a class="headerlink" href="#2-dataset" title="Permanent link">&para;</a></h4>
+<p>데이터셋을 로드하면 일반적으로 <code>Dataset</code> 객체(단일 분할) 또는 <code>DatasetDict</code>(여러 분할)를 얻게 됩니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Dataset 구조 확인</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;glue&quot;</span><span class="p">,</span> <span class="s2">&quot;sst2&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">dataset</span><span class="p">))</span>  <span class="c1"># &lt;class &#39;datasets.dataset_dict.DatasetDict&#39;&gt;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>  <span class="c1"># dict_keys([&#39;train&#39;, &#39;validation&#39;, &#39;test&#39;])</span>
+
+<span class="c1"># 특정 분할 접근</span>
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">))</span>  <span class="c1"># 예: 67349 (항목 수)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train_dataset</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>  <span class="c1"># 컬럼 구조 확인</span>
+
+<span class="c1"># 개별 항목 접근</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># 첫 번째 항목 (딕셔너리 형태)</span>
+</code></pre></div>
+<h4 id="3_2">3. 데이터셋 처리<a class="headerlink" href="#3_2" title="Permanent link">&para;</a></h4>
+<p>Dataset 객체는 데이터 처리를 위한 다양한 메소드를 제공합니다:</p>
+<h5 id="map">map 함수로 데이터 변환<a class="headerlink" href="#map" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">AutoTokenizer</span>
+
+<span class="c1"># 토크나이저 로드</span>
+<span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;klue/bert-base&quot;</span><span class="p">)</span>
+
+<span class="c1"># 텍스트 토큰화 함수</span>
+<span class="k">def</span> <span class="nf">tokenize_function</span><span class="p">(</span><span class="n">examples</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">tokenizer</span><span class="p">(</span>
+        <span class="n">examples</span><span class="p">[</span><span class="s2">&quot;sentence&quot;</span><span class="p">],</span>
+        <span class="n">padding</span><span class="o">=</span><span class="s2">&quot;max_length&quot;</span><span class="p">,</span>
+        <span class="n">truncation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">128</span>
+    <span class="p">)</span>
+
+<span class="c1"># 모든 예제에 함수 적용 (병렬 처리)</span>
+<span class="n">tokenized_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
+    <span class="n">tokenize_function</span><span class="p">,</span>
+    <span class="n">batched</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># 배치 처리로 속도 향상</span>
+    <span class="n">num_proc</span><span class="o">=</span><span class="mi">4</span>     <span class="c1"># 병렬 처리 (CPU 코어 수에 따라 조정)</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>map 함수는 결과를 자동으로 캐싱하므로, 동일한 처리를 반복할 필요가 없습니다.</p>
+<h5 id="_3">필터링과 정렬<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="c1"># 특정 조건으로 필터링</span>
+<span class="n">short_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;sentence&quot;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># 특정 컬럼으로 정렬</span>
+<span class="n">sorted_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;label&quot;</span><span class="p">)</span>
+
+<span class="c1"># 데이터셋 섞기</span>
+<span class="n">shuffled_dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># 분할</span>
+<span class="n">train_test</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="c1"># 결과: DatasetDict({&#39;train&#39;: Dataset(...), &#39;test&#39;: Dataset(...)})</span>
+</code></pre></div>
+<h4 id="4_1">4. 메모리 관리 및 스트리밍<a class="headerlink" href="#4_1" title="Permanent link">&para;</a></h4>
+<p>대규모 데이터셋을 처리할 때 RAM 사용량을 관리하는 몇 가지 방법이 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 스트리밍 모드로 데이터셋 로드 (전체를 메모리에 로드하지 않음)</span>
+<span class="n">streamed_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;c4&quot;</span><span class="p">,</span> <span class="s2">&quot;ko&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">,</span> <span class="n">streaming</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># 이터레이터로 사용</span>
+<span class="k">for</span> <span class="n">example</span> <span class="ow">in</span> <span class="n">streamed_dataset</span><span class="p">:</span>
+    <span class="c1"># 한 번에 하나의 예제만 메모리에 로드</span>
+    <span class="n">process_example</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+
+<span class="c1"># 스트리밍 데이터셋의 일부만 확인</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">example</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">streamed_dataset</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">:</span>  <span class="c1"># 처음 5개만 확인</span>
+        <span class="k">break</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">example</span><span class="p">)</span>
+</code></pre></div>
+<p>스트리밍 데이터셋에도 <code>.map()</code>, <code>.filter()</code> 등을 적용할 수 있으며, 이 경우 변환이 지연 처리(lazy processing)됩니다.</p>
+<h4 id="5-transformers">5. Transformers와 통합<a class="headerlink" href="#5-transformers" title="Permanent link">&para;</a></h4>
+<p>Datasets는 Transformers 라이브러리와 원활하게 통합됩니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># PyTorch 텐서 형식으로 설정</span>
+<span class="n">tokenized_dataset</span><span class="o">.</span><span class="n">set_format</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;torch&quot;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;input_ids&quot;</span><span class="p">,</span> <span class="s2">&quot;attention_mask&quot;</span><span class="p">,</span> <span class="s2">&quot;label&quot;</span><span class="p">])</span>
+
+<span class="c1"># Trainer에 직접 전달</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span><span class="p">,</span> <span class="n">AutoModelForSequenceClassification</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForSequenceClassification</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;klue/bert-base&quot;</span><span class="p">)</span>
+<span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span><span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./results&quot;</span><span class="p">,</span> <span class="n">num_train_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+    <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+    <span class="n">train_dataset</span><span class="o">=</span><span class="n">tokenized_dataset</span><span class="p">[</span><span class="s2">&quot;train&quot;</span><span class="p">],</span>
+    <span class="n">eval_dataset</span><span class="o">=</span><span class="n">tokenized_dataset</span><span class="p">[</span><span class="s2">&quot;validation&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+</code></pre></div>
+<h4 id="6-hub">6. Hub와 데이터셋 공유<a class="headerlink" href="#6-hub" title="Permanent link">&para;</a></h4>
+<p>처리한 데이터셋을 Hugging Face Hub에 공유할 수 있습니다:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 데이터셋을 Hub에 업로드</span>
+<span class="n">processed_dataset</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span><span class="s2">&quot;username/my_processed_dataset&quot;</span><span class="p">)</span>
+
+<span class="c1"># 메타데이터 및 카드 정보 포함</span>
+<span class="n">processed_dataset</span><span class="o">.</span><span class="n">push_to_hub</span><span class="p">(</span>
+    <span class="s2">&quot;username/my_processed_dataset&quot;</span><span class="p">,</span>
+    <span class="n">repository_url</span><span class="o">=</span><span class="s2">&quot;https://huggingface.co/datasets/username/my_processed_dataset&quot;</span><span class="p">,</span>
+    <span class="n">commit_message</span><span class="o">=</span><span class="s2">&quot;Add processed Korean sentiment dataset&quot;</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>데이터셋을 공유하면 다른 사용자들이 <code>load_dataset("username/my_processed_dataset")</code>으로 쉽게 이용할 수 있습니다.</p>
+<h4 id="8">8. 대규모 데이터셋 작업 팁<a class="headerlink" href="#8" title="Permanent link">&para;</a></h4>
+<p>대규모 데이터셋 작업 시 추천되는 방법들:</p>
+<ul>
+<li>메모리 맵핑: Datasets는 기본적으로 메모리 맵핑을 사용하여 전체 데이터셋을 RAM에 로드하지 않습니다.</li>
+<li>컬럼 선택: 필요한 컬럼만 선택하여 메모리 사용량 감소 (<code>dataset.select_columns(["text", "label"])</code>)</li>
+<li>배치 처리: <code>.map(batch_size=1000)</code>으로 대규모 변환을 효율적으로 처리</li>
+<li>캐싱 활용: 기본적으로 <code>.map()</code> 결과는 캐시되지만, 필요하면 <code>load_from_cache_file=False</code>로 비활성화 가능</li>
+<li>분산 처리: <code>num_proc</code> 인자로 멀티프로세싱 활용</li>
+</ul>
+<p>Datasets 라이브러리는 대규모 데이터셋도 효율적으로 처리할 수 있게 설계되어, 모델 훈련 및 평가를 위한 데이터 준비 과정을 크게 간소화합니다.</p>
+<h3 id="hugging-face-spaces-gradio-streamlit">Hugging Face Spaces (Gradio / Streamlit 앱 호스팅)<a class="headerlink" href="#hugging-face-spaces-gradio-streamlit" title="Permanent link">&para;</a></h3>
+<p>Spaces는 Hugging Face의 라이브 머신러닝 데모 및 애플리케이션을 호스팅하기 위한 솔루션입니다. Space는 본질적으로 웹 앱(주로 Gradio 또는 Streamlit 사용)을 실행하고 지속적인 URL을 통해 다른 사용자와 공유할 수 있는 샌드박스 환경입니다.</p>
+<h4 id="1-space">1. Space 생성 및 공유<a class="headerlink" href="#1-space" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Space는 Git 저장소를 기반으로 합니다</li>
+<li>Hub에서 새 Space를 만들고 이름 선택, 공개/비공개 설정, SDK 유형을 선택합니다</li>
+<li>코드를 푸시하면 Space가 자동으로 빌드되고 실행됩니다</li>
+</ul>
+<h4 id="2_2">2. 개발 도구<a class="headerlink" href="#2_2" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Gradio</strong>: 모델용 웹 인터페이스를 쉽게 만들 수 있는 Python 라이브러리입니다</li>
+<li>함수(입력 텍스트를 받아 출력 텍스트를 반환하는 예측 함수 등)를 정의하면 Gradio가 텍스트 박스, 버튼 등과 함께 인터페이스를 생성합니다</li>
+<li><strong>Streamlit</strong>: Python 스크립트로 작은 웹 앱을 작성하는 것과 더 유사합니다</li>
+<li>그래프, 위젯 등에도 직관적인 인터페이스를 제공합니다, 요즘 가장 간단하게 파이썬으로 웹 앱을 만드는 라이브러리로 유명합니다. </li>
+</ul>
+<h4 id="3_3">3. 하드웨어 및 스케일링<a class="headerlink" href="#3_3" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>기본 사양</strong>: 무료 CPU 전용 컨테이너(16GB RAM)</li>
+<li>작은 모델이나 추론 API를 호출하는 데모에 적합</li>
+<li><strong>GPU 업그레이드 (유료)</strong>: 대형 모델 호스팅 시 필요</li>
+<li>T4, A10G, A100 등 다양한 티어 제공</li>
+<li>시간당 과금 방식</li>
+</ul>
+<h4 id="4-spaces">4. Spaces 활용 사례<a class="headerlink" href="#4-spaces" title="Permanent link">&para;</a></h4>
+<ul>
+<li>OpenLLM Learderboard</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="하단/푸터" >
+        
+          
+          <a href="../1_openai_finetuning/" class="md-footer__link md-footer__link--prev" aria-label="이전: GPT-4o-mini 파인튜닝 실습 (ipynb)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                이전
+              </span>
+              <div class="md-ellipsis">
+                GPT-4o-mini 파인튜닝 실습 (ipynb)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../2_huggingface_style_finetuning/" class="md-footer__link md-footer__link--next" aria-label="다음: 오픈 모델을 이용한 Fine Tuning &amp;amp; LoRA">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                다음
+              </span>
+              <div class="md-ellipsis">
+                오픈 모델을 이용한 Fine Tuning &amp; LoRA
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.expand", "navigation.path", "navigation.instant", "navigation.tracking", "navigation.sections", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "\ud074\ub9bd\ubcf4\ub4dc\uc5d0 \ubcf5\uc0ac\ub428", "clipboard.copy": "\ud074\ub9bd\ubcf4\ub4dc\ub85c \ubcf5\uc0ac", "search.result.more.one": "\uc774 \ubb38\uc11c\uc5d0\uc11c 1\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.more.other": "\uc774 \ubb38\uc11c\uc5d0\uc11c #\uac1c\uc758 \uac80\uc0c9 \uacb0\uacfc \ub354 \ubcf4\uae30", "search.result.none": "\uac80\uc0c9\uc5b4\uc640 \uc77c\uce58\ud558\ub294 \ubb38\uc11c\uac00 \uc5c6\uc2b5\ub2c8\ub2e4", "search.result.one": "1\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.other": "#\uac1c\uc758 \uc77c\uce58\ud558\ub294 \ubb38\uc11c", "search.result.placeholder": "\uac80\uc0c9\uc5b4\ub97c \uc785\ub825\ud558\uc138\uc694", "search.result.term.missing": "\ud3ec\ud568\ub418\uc9c0 \uc54a\uc740 \uac80\uc0c9\uc5b4", "select.version": "\ubc84\uc804 \uc120\ud0dd"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.fe8b6f2b.min.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

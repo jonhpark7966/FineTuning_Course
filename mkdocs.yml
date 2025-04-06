@@ -27,14 +27,19 @@ nav:
     - Alpaca: case_studies/alpaca.md
     - DeepSeek: case_studies/deepseek.md
     - Zephyr: case_studies/zephyr.md
-  - OpenAI GPT 파인튜닝 실습 가이드:
+  - OpenAI GPT 파인튜닝 실습:
     - OpenAI 파인튜닝 서비스 개요 : practice_guides/gpt_finetuning.md
     - GPT-4o-mini 파인튜닝 실습 (GUI): practice_guides/gpt_finetuning_gui.md
     - GPT-4o-mini 파인튜닝 실습 (ipynb): practice_guides/1_openai_finetuning.ipynb
-  - Open Weight 모델 파인튜닝 실습 가이드:
-    - 오픈 웨이트 파인튜닝: practice_guides/open_weight_finetuning.md
-    - DPO 튜닝: practice_guides/dpo_tutorial.md
-    - 추론 모델 개발: practice_guides/reasoning_model.md
+  - Open Weight 모델 파인튜닝 실습:
+    - Hugging Face 플랫폼 & 라이브러리 : practice_guides/huggingface.md
+    - 오픈 웨이트 파인튜닝 실습 (w. PEFT): practice_guides/2_huggingface_style_finetuning.ipynb
+    - 한국어 CPT & 인스트럭션 튜닝: practice_guides/3_korean_fine_tuning_cpt_instruct.ipynb
+    - DPO 튜닝: practice_guides/5_DPO.ipynb
+    - Reasoning 모델 만들기 - DeepSeek R1 Distillation: practice_guides/6_1_Reasoning_distillation.ipynb
+  - 평가 실습:
+    - MMLU 평가: practice_guides/4_1_eval_mmlu.ipynb
+    - LLM as Judge 평가: practice_guides/4_2_eval_langsmith_llmasjudge.ipynb
   - 연구 동향 및 프로젝트:
     - 최신 연구 동향: trends_projects/latest_research.md
     - 데이터 및 라이선스: trends_projects/license_data_issues.md
